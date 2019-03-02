@@ -1,61 +1,20 @@
 package com.holeman79.shoppingbackend;
 
 import org.imgscalr.Scalr;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.UUID;
 
-@Service
-public class FileService {
-    @Value("${property.uploadPath}")
-    private String uploadPath;
+public class UploadFileUtils {
+    private static final Logger logger = LoggerFactory.getLogger(UploadFileUtils.class);
 
-    public String saveImage(MultipartFile file){
-        if (file.isEmpty()) {
-            return "is empty";
-        }
-        try {
-            System.out.println("File name=" + file.getOriginalFilename() + " size=" + file.getSize());
-            String path = "C:\\upload\\";
-
-            File dir = new File(path);
-            if(!dir.isDirectory()){
-                dir.mkdir();
-            }
-            //+ System.currentTimeMillis() + "_"
-            //  방법1
-            String newFile = path + file.getOriginalFilename();
-            file.transferTo(new File(newFile));
-
-            // 방법2
-            // Get the file and save it somewhere
-//            byte[] bytes = file.getBytes();
-//            Path path = Paths.get("C:\\upload\\" + file.getOriginalFilename());
-//            Files.write(path, bytes);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return file.getOriginalFilename() + "success";
-    }
-
-    public void uploadProductFile(MultipartFile[] productFiles) throws Exception{
-        for(MultipartFile file : productFiles){
-            uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes());
-        }
-    }
     public static String uploadFile(String uploadPath, String originalName, byte[] fileData) throws Exception {
 
         //겹쳐지지 않는 파일명을 위한 유니크한 값 생성
@@ -93,24 +52,19 @@ public class FileService {
     private static String calcPath(String uploadPath) {
 
         Calendar cal = Calendar.getInstance();
+
         String yearPath = File.separator + cal.get(Calendar.YEAR);
+
         String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH)+1);
+
         String datePath = monthPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.DATE));
+
         makeDir(uploadPath, yearPath, monthPath, datePath);
 
+        logger.info(datePath);
+
         return datePath;
-    }
-
-    //폴더 생성 함수
-    @SuppressWarnings("unused")
-    private static String categoryPath(String uploadPath) {
-
-        String imagesPath = File.separator + "images";
-        String productsPath = imagesPath + File.separator + "products";
-        makeDir(uploadPath, imagesPath, productsPath);
-
-        return productsPath;
-    }
+    }//calcPath
 
     //폴더 생성 함수
     private static void makeDir(String uploadPath, String... paths) {
@@ -131,6 +85,7 @@ public class FileService {
 
     }//makeDir
 
+    //음??? 아이콘? 이미지 파일이 아닌경우  썸네일을 대신?
     private static String makeIcon(String uploadPath, String path, String fileName) throws Exception{
         String iconName = uploadPath + path + File.separator + fileName;
         return iconName.substring(uploadPath.length()).replace(File.separatorChar, '/');
@@ -150,5 +105,4 @@ public class FileService {
         ImageIO.write(destImg, formatName.toUpperCase(), newFile);
         return thumbnailName.substring(uploadPath.length()).replace(File.separatorChar, '/');
     }
-
 }

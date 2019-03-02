@@ -1,10 +1,14 @@
 package com.holeman79.shoppingbackend.product;
 
 import com.holeman79.shoppingbackend.FileService;
+import com.holeman79.shoppingbackend.common.CommonCode;
+import com.holeman79.shoppingbackend.common.CommonCodeService;
 import com.holeman79.shoppingbackend.payload.ProductRequest;
+import com.holeman79.shoppingbackend.product.domain.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +22,30 @@ import java.util.List;
 public class ProductController {
     private final static Logger log = LoggerFactory.getLogger(ProductController.class);
     @Autowired
+    ProductService productService;
+
+    @Autowired
     FileService fileService;
 
+    @Autowired
+    CommonCodeService commonCodeService;
+
+    @GetMapping("/commonCode")
+    public ResponseEntity<List<List<CommonCode>>> getAllProductCommonCodeList(){
+        return new ResponseEntity<List<List<CommonCode>>>(commonCodeService.getAllProductCommonCodeList(), HttpStatus.OK);
+    }
+
     @PostMapping
-    public ResponseEntity<?> addProduct(@RequestPart("product") ProductRequest product, @RequestPart("productFiles") MultipartFile[] productFiles){
-        ResponseEntity result = new ResponseEntity("{}", HttpStatus.OK);
-        return result;
+    public ResponseEntity<?> addProduct(@RequestPart("product") Product product, @RequestPart("productFiles") MultipartFile[] productFiles) throws Exception{
+        fileService.uploadProductFile(productFiles);
+
+        Product savedProduct = productService.addProduct(product);
+
+
+        Product getProduct = productService.getProduct(savedProduct.getId());
+        if(savedProduct != null)
+            return new ResponseEntity("{}", HttpStatus.OK);
+        return new ResponseEntity("{}", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping("/test4")
