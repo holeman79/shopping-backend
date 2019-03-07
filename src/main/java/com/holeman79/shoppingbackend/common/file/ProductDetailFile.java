@@ -1,4 +1,4 @@
-package com.holeman79.shoppingbackend.product.domain;
+package com.holeman79.shoppingbackend.common.file;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,19 +9,20 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-public class ProductFile {
+public class ProductDetailFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String uploadPath;
+    private String directory;
     private String originalFileName;
-    private String storedFileName;
-    private int fileSize;
+    private String savedFileName;
+    private Long fileSize;
     private Date createdAt;
     private String createdId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private Product product;
+    @Column(name="product_id")
+    private Long productId;
 
     @PrePersist
     public void beforeCreate(){

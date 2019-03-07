@@ -1,4 +1,4 @@
-package com.holeman79.shoppingbackend.common;
+package com.holeman79.shoppingbackend.common.commoncode;
 
 import lombok.Data;
 

@@ -24,6 +24,7 @@ spring:
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+      fail-on-empty-beans: false
     time-zone: UTC
 
 app:
@@ -33,5 +34,11 @@ app:
 ##spring.servlet.multipart.max-file-size=128KB
 ##spring.servlet.multipart.max-request-size=128KB
 
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+
 property:
-  uploadPath: C:\\upload\\
+  uploadPath: C:\\upload

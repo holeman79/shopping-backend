@@ -1,4 +1,4 @@
-package com.holeman79.shoppingbackend;
+package com.holeman79.shoppingbackend.common.file;
 
 import org.springframework.http.MediaType;
 
