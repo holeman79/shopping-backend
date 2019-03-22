@@ -1,5 +1,8 @@
-package com.holeman79.shoppingbackend.common.file;
+package com.holeman79.shoppingbackend.product.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.holeman79.shoppingbackend.product.domain.Product;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +12,8 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-public class ProductDetailFile {
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="product_id")
+public class ProductFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,12 +21,14 @@ public class ProductDetailFile {
     private String directory;
     private String originalFileName;
     private String savedFileName;
+    private String thumbnailSavedFileName;
     private Long fileSize;
     private Date createdAt;
     private String createdId;
 
-    @Column(name="product_id")
-    private Long productId;
+    @OneToOne
+    @JoinColumn(name="product_id", referencedColumnName = "id")
+    private Product product;
 
     @PrePersist
     public void beforeCreate(){

@@ -2,12 +2,11 @@ package com.holeman79.shoppingbackend.product.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.holeman79.shoppingbackend.common.file.ProductDetailFile;
-import com.holeman79.shoppingbackend.common.file.ProductFile;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -19,10 +18,15 @@ public class Product{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String category;
+
+    @ManyToOne
+    @JoinColumn(name="category_code", referencedColumnName = "code")
+    private Category category;
     private String price;
     private String savedMoneyRate;
     private String description;
+    private Date createdAt;
+    private String createdId;
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="product_id")
@@ -31,7 +35,11 @@ public class Product{
     @OneToOne(mappedBy = "product", cascade=CascadeType.ALL)
     private ProductFile productFile;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="product_id")
+    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
     private List<ProductDetailFile> productDetailFiles;
+
+    @PrePersist
+    public void beforeCreate(){
+        createdAt = new Date();
+    }
 }

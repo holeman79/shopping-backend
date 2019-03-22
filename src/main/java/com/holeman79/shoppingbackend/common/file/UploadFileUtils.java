@@ -59,7 +59,7 @@ public class UploadFileUtils {
     public static String makeDirectoryByCategory(String uploadPath, Product product) {
         String imagesPath = File.separator + "images";
         String productsPath = imagesPath + File.separator + "products";
-        String categoryPath = productsPath + File.separator + product.getCategory();
+        String categoryPath = productsPath + File.separator + product.getCategory().getCode();
         String productTitlePath = categoryPath + File.separator + product.getId() + "." + product.getTitle();
         makeDir(uploadPath, imagesPath, productsPath, categoryPath, productTitlePath);
 
@@ -80,10 +80,10 @@ public class UploadFileUtils {
     }
 
     //썸네일 이미지 생성
-    public static String makeThumbnail(String uploadPath, String directory, String fileName) throws Exception {
+    public static String makeThumbnail(String uploadPath, String directory, String fileName, int size) throws Exception {
 
         BufferedImage sourceImg = ImageIO.read(new File(uploadPath + directory, fileName));
-        BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, 500);
+        BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, size);
 
         String thumbnailName = uploadPath + directory + File.separator + "Thumbnail_" + fileName;
 

@@ -17,8 +17,16 @@ public class Option{
     private Long id;
     @Column(name="product_id")
     private Long productId;
-    private String size;
-    private String color;
-    private String number;
+
+    @ManyToOne
+    @JoinColumn(name="size_code", referencedColumnName = "code")
+    private Size size;
+    @ManyToOne
+    @JoinColumn(name="color_code", referencedColumnName = "code")
+    private Color color;
+    private int number;
+
+//    @Transient
+//    private int sizeOrder;
 
 }
