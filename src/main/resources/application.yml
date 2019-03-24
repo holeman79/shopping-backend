@@ -12,6 +12,7 @@ spring:
     password:
     initialization-mode: always
     driverClassName: org.h2.Driver
+    data: classpath:/data-commoncode.sql, classpath:/data-product.sql, classpath:/data-productFiles.sql
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:

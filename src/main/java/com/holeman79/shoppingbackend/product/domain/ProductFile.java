@@ -1,6 +1,7 @@
 package com.holeman79.shoppingbackend.product.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.holeman79.shoppingbackend.product.domain.Product;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="product_id")
+//@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class)
 public class ProductFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,8 @@ public class ProductFile {
     private String createdId;
 
     @OneToOne
-    @JoinColumn(name="product_id", referencedColumnName = "id")
+    @JoinColumn(name="product_id")
+    @JsonIgnore
     private Product product;
 
     @PrePersist

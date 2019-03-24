@@ -52,7 +52,6 @@ public class ProductController {
                                         @RequestPart("productFile") MultipartFile file,
                                         @RequestPart("productDetailFiles") MultipartFile[] detailFiles) throws Exception{
         Product savedProduct = productService.addProduct(product, file, detailFiles);
-        //Product getProduct = productService.getProduct(savedProduct.getId());
         if(savedProduct != null)
             return new ResponseEntity<Long>(savedProduct.getId(), HttpStatus.OK);
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

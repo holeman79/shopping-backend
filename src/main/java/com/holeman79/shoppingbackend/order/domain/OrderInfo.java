@@ -23,9 +23,14 @@ public class OrderInfo {
     private String mobileNo2;
     private String mobileNo3;
 
-    private String selectedPayment;
+    @ManyToOne
+    @JoinColumn(name = "payment_code")
+    private PaymentWay selectedPayment;
     private String depositorName;
-    private String bankBook;
+
+    @ManyToOne
+    @JoinColumn(name = "bankbook_code")
+    private BankBook selectedBankBook;
     private int paymentCheck;
 
     private int totalPrice;

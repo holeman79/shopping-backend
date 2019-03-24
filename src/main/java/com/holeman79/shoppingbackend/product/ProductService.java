@@ -5,8 +5,6 @@ import com.holeman79.shoppingbackend.product.domain.Option;
 import com.holeman79.shoppingbackend.product.domain.Product;
 import com.holeman79.shoppingbackend.product.domain.ProductDetailFile;
 import com.holeman79.shoppingbackend.product.domain.ProductFile;
-import com.holeman79.shoppingbackend.product.repository.ProductDetailFileRepository;
-import com.holeman79.shoppingbackend.product.repository.ProductFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -29,18 +27,17 @@ public class ProductService {
     @Value("${property.uploadPath}")
     private String uploadPath;
 
-    @Autowired
-    ProductFileRepository productFileRepository;
-
-    @Autowired
-    ProductDetailFileRepository productDetailFileRepository;
-
     @Transactional
     public Product addProduct(Product product, MultipartFile file, MultipartFile[] detailFiles) throws Exception{
         List<ProductDetailFile> productDetailFiles = new ArrayList<>();
 
         // save 통해서 product 번호 생성
         Product savedProduct = productRepository.save(product);
+        List<Option> optionList = savedProduct.getOptions();
+        for(Option option : optionList){
+            option.setProduct(savedProduct);
+        }
+
         String directory = UploadFileUtils.makeDirectoryByCategory(uploadPath, savedProduct);
         String savedFileName = UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes(), directory);
         ProductFile productFile = new ProductFile();
@@ -61,14 +58,10 @@ public class ProductService {
             productDetailFile.setOriginalFileName(detailFile.getOriginalFilename());
             productDetailFile.setSavedFileName(savedFileName);
             productDetailFile.setFileSize(detailFile.getSize());
-            //productDetailFile.setProductId(savedProduct.getId());
             productDetailFile.setProduct(savedProduct);
             productDetailFiles.add(productDetailFile);
-            //productDetailFileRepository.save(productDetailFile);
         }
         savedProduct.setProductDetailFiles(productDetailFiles);
-        savedProduct = productRepository.save(savedProduct);
-
         return savedProduct;
     }
 

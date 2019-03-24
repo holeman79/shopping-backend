@@ -1,12 +1,10 @@
 package com.holeman79.shoppingbackend.product.domain;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -15,18 +13,18 @@ public class Option{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="product_id")
-    private Long productId;
 
     @ManyToOne
-    @JoinColumn(name="size_code", referencedColumnName = "code")
+    @JoinColumn(name = "product_id")
+    @JsonIgnore
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name="size_code")
     private Size size;
     @ManyToOne
-    @JoinColumn(name="color_code", referencedColumnName = "code")
+    @JoinColumn(name="color_code")
     private Color color;
     private int number;
-
-//    @Transient
-//    private int sizeOrder;
 
 }

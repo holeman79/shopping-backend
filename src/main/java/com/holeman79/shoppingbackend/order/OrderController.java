@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/orderInfo")
+@RequestMapping("/api/order")
 public class OrderController {
     @Autowired
     OrderService orderService;
@@ -45,8 +45,8 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<?> addOrder(@RequestBody OrderInfo orderInfo){
-
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        OrderInfo savedOrderInfo = orderService.addOrder(orderInfo);
+        if(savedOrderInfo != null) return new ResponseEntity<OrderInfo>(savedOrderInfo, HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

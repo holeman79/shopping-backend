@@ -11,9 +11,7 @@ import org.springframework.util.FileCopyUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.UUID;
@@ -94,4 +92,23 @@ public class UploadFileUtils {
         //return thumbnailName.substring(uploadPath.length()).replace(File.separatorChar, '/');
         return "Thumbnail_" + fileName;
     }
+
+    public static void fileCopy(String inFileName, String outFileName) {
+        try {
+            FileInputStream fis = new FileInputStream(inFileName);
+            FileOutputStream fos = new FileOutputStream(outFileName);
+
+            int data = 0;
+            while((data=fis.read())!=-1) {
+                fos.write(data);
+            }
+            fis.close();
+            fos.close();
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
 }
