@@ -92,6 +92,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .permitAll()
                 .antMatchers(HttpMethod.GET,"/api/file/**")
                 .permitAll()
+                .antMatchers("/api/common/**")
+                .permitAll()
                 .antMatchers("/h2-console/**")
                 .permitAll()
                 .anyRequest()

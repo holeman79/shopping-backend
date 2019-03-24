@@ -81,9 +81,10 @@ public class ProductService {
         return product;
     }
 
-    public Page<Product> getProductList(Pageable pageable ){
-        pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize());
-        return productRepository.findAll(pageable);
+    public Page<Product> getProductList(Pageable pageable, String categoryCode){
+        pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize()-1);
+        if(categoryCode == null) return productRepository.findAll(pageable);
+        return productRepository.findByCategoryCode(pageable, categoryCode);
     }
 
     static class CompareSizeAsc implements Comparator<Option> {

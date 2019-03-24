@@ -66,8 +66,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Product>> getProductList(@PageableDefault Pageable pageable){
-        Page<Product> productList = productService.getProductList(pageable);
+    public ResponseEntity<Page<Product>> getProductList(@PageableDefault Pageable pageable, @RequestParam(name="category", required=false) String categoryCode){
+        Page<Product> productList = productService.getProductList(pageable, categoryCode);
         if(productList.getContent().size() > 0)
             return new ResponseEntity<Page<Product>>(productList, HttpStatus.OK);
         return new ResponseEntity(HttpStatus.NO_CONTENT);

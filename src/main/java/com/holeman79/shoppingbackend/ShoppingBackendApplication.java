@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.List;
 
 @SpringBootApplication
-public class ShoppingBackendApplication implements CommandLineRunner {
+public class ShoppingBackendApplication {
 	@Value("${property.uploadPath}")
 	private String uploadPath;
 
@@ -66,31 +66,31 @@ public class ShoppingBackendApplication implements CommandLineRunner {
 	}
 
 
-	@Override
-	public void run(String... args) throws Exception {
-		ClassLoader classLoader = getClass().getClassLoader();
-		//File readFile = new File(classLoader.getResource("static/sample/knit/1/knit1_type1.PNG").getFile());
-
-		//System.out.println(testfile.getName() + " : " + testfile.getAbsolutePath());
-		//ProductRepository productRepository = context.getBean(ProductRepository.class);
-		Category category = new Category("outer", "아우터");
-		List<Product> productList = productRepository.findByCategory(category);
-
-		for(int i = 0; i < productList.size(); i++){
-			String imagePathFrom = "static/sample";
-			Product product = productList.get(i);
-			imagePathFrom = imagePathFrom + "/" + product.getCategory().getCode() + "/" + (i+1) + "/" + product.getProductFile().getSavedFileName();
-			File readFile = new File(classLoader.getResource(imagePathFrom).getFile());
-
-			String filePath = uploadPath + product.getProductFile().getDirectory() + product.getProductFile().getSavedFileName();
-			UploadFileUtils.makeDirectoryByCategory(uploadPath, product);
-			UploadFileUtils.fileCopy(classLoader.getResource(imagePathFrom).getFile(), filePath);
-		}
-
-
-		//String filePath = uploadPath + productList.get(0).getProductFile().getDirectory() + productList.get(0).getProductFile().getOriginalFileName();
-		//UploadFileUtils.fileCopy(classLoader.getResource("static/sample/knit/knit1_type1.PNG").getFile(), filePath);
-		//UploadFileUtils.makeDirectoryByCategory(productList.get(0).getProductFile().getUploadPath(), productList.get(0));
-	}
+//	@Override
+//	public void run(String... args) throws Exception {
+//		ClassLoader classLoader = getClass().getClassLoader();
+//		//File readFile = new File(classLoader.getResource("static/sample/knit/1/knit1_type1.PNG").getFile());
+//
+//		//System.out.println(testfile.getName() + " : " + testfile.getAbsolutePath());
+//		//ProductRepository productRepository = context.getBean(ProductRepository.class);
+//		Category category = new Category("outer", "아우터");
+//		List<Product> productList = productRepository.findByCategory(category);
+//
+//		for(int i = 0; i < productList.size(); i++){
+//			String imagePathFrom = "static/sample";
+//			Product product = productList.get(i);
+//			imagePathFrom = imagePathFrom + "/" + product.getCategory().getCode() + "/" + (i+1) + "/" + product.getProductFile().getSavedFileName();
+//			File readFile = new File(classLoader.getResource(imagePathFrom).getFile());
+//
+//			String filePath = uploadPath + product.getProductFile().getDirectory() + product.getProductFile().getSavedFileName();
+//			UploadFileUtils.makeDirectoryByCategory(uploadPath, product);
+//			UploadFileUtils.fileCopy(classLoader.getResource(imagePathFrom).getFile(), filePath);
+//		}
+//
+//
+//		//String filePath = uploadPath + productList.get(0).getProductFile().getDirectory() + productList.get(0).getProductFile().getOriginalFileName();
+//		//UploadFileUtils.fileCopy(classLoader.getResource("static/sample/knit/knit1_type1.PNG").getFile(), filePath);
+//		//UploadFileUtils.makeDirectoryByCategory(productList.get(0).getProductFile().getUploadPath(), productList.get(0));
+//	}
 }
 

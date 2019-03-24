@@ -3,6 +3,12 @@ INSERT INTO COLOR(code, name) VALUES('red', '레드');
 INSERT INTO COLOR(code, name) VALUES('green', '그린');
 INSERT INTO COLOR(code, name) VALUES('blue', '블루');
 INSERT INTO COLOR(code, name) VALUES('black', '블랙');
+INSERT INTO COLOR(code, name) VALUES('white', '화이트');
+INSERT INTO COLOR(code, name) VALUES('ivory', '아이보리');
+INSERT INTO COLOR(code, name) VALUES('khaki', '카키');
+INSERT INTO COLOR(code, name) VALUES('camel', '카멜');
+INSERT INTO COLOR(code, name) VALUES('navy', '네이비');
+INSERT INTO COLOR(code, name) VALUES('yellow', '옐로우');
 
 INSERT INTO SIZE(code, name, size_order) VALUES('small', 'S', 1);
 INSERT INTO SIZE(code, name, size_order) VALUES('medium', 'M', 2);

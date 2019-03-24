@@ -30,7 +30,12 @@ public class FileController {
             MediaType mType = MediaUtils.getMediaType(formatName);
             HttpHeaders headers = new HttpHeaders();
 
-            in = new FileInputStream(uploadPath + fileName);
+            String sample = fileName.substring(0, 6);           // 프로젝트 내에 저장된 샘플 이미지 불러오기
+            if("static".equals(sample)){
+                ClassLoader classLoader = getClass().getClassLoader();
+                in = new FileInputStream(classLoader.getResource(fileName).getFile());
+            }
+            else in = new FileInputStream(fileName);
 
             if(mType != null) {
                 headers.setContentType(mType);
