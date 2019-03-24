@@ -25,6 +25,7 @@ public class SwaggerConfig {
                 .description("React Spring ShoppingMall Rest API")
                 .version("1.0")
                 .build();
+
     }
 
     @Bean
