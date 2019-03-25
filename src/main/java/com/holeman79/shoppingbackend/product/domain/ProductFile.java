@@ -13,7 +13,6 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-//@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class)
 public class ProductFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

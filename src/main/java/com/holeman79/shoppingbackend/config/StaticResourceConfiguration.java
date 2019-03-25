@@ -23,13 +23,6 @@ public class StaticResourceConfiguration implements WebMvcConfigurer {
         registry.addResourceHandler("/**")
                 .addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
     }
-
-//    @Bean(name = "multipartResolver")
-//    public MultipartResolver multipartResolver() {
-//        MultipartResolver multipartResolver = new CommonsMultipartResolver();
-//        ((CommonsMultipartResolver) multipartResolver).setMaxUploadSizePerFile(10000000L);
-//        return multipartResolver;
-//    }
     @Bean
     public MultipartResolver multipartResolvers() {
         return new StandardServletMultipartResolver();

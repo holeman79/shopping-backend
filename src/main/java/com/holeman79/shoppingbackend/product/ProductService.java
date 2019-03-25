@@ -66,16 +66,7 @@ public class ProductService {
     }
 
     public Product getProduct(Long id){
-        //List<CommonCode> commonCodeSizeList = commonCodeRepository.findByCommonCodeIdGroupCode("PROD003");
         Product product = productRepository.getOne(id);
-//        List<Option> options = product.getOptions();
-//        for(Option option : options){
-//            for(CommonCode commonCode : commonCodeSizeList){
-//                if(commonCode.getCodeValue().equals(option.getSize()))
-//                    option.setSizeOrder(commonCode.getCommonCodeId().getCode());
-//            }
-//        }
-//        Collections.sort(options, new CompareSizeAsc());
         List<Option> options = product.getOptions();
         Collections.sort(options, new CompareSizeAsc());
         return product;
