@@ -16,7 +16,6 @@ import java.util.List;
 
 @SpringBootApplication
 public class ShoppingBackendApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ShoppingBackendApplication.class, args);
 	}

@@ -1,4 +1,4 @@
-package com.holeman79.shoppingbackend.config;
+package com.holeman79.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

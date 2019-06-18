@@ -1,4 +1,4 @@
-package com.holeman79.shoppingbackend.config;
+package com.holeman79.config;
 
 import com.holeman79.shoppingbackend.security.CustomUserDetailsService;
 import com.holeman79.shoppingbackend.security.JwtAuthenticationEntryPoint;
@@ -63,6 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .csrf()
                 .disable()
                 .exceptionHandling()
+
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
                 .sessionManagement()
@@ -84,11 +85,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers(HttpMethod.POST,"/api/auth/**")
+                    .antMatchers(HttpMethod.POST,"/api/auth/**")
                 .permitAll()
-                .antMatchers(HttpMethod.GET,"/api/product/option")
+                    .antMatchers(HttpMethod.GET,"/api/product/option")
                 .authenticated()
-                .antMatchers(HttpMethod.GET,"/api/product/**")
+                    .antMatchers(HttpMethod.GET,"/api/product/**")
                 .permitAll()
                 .antMatchers(HttpMethod.GET,"/api/file/**")
                 .permitAll()
@@ -100,17 +101,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .authenticated()
                 .and()
                 .headers()
-                .frameOptions().disable();
-//                .addHeaderWriter(
-//                        new XFrameOptionsHeaderWriter(
-//                                new WhiteListedAllowFromStrategy(Arrays.asList("localhost"))    // 여기!
-//                        )
-//                );
-
-
-
-        // Add our custom JWT security filter
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .frameOptions().disable()
+                .and()
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 }

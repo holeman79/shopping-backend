@@ -1,4 +1,4 @@
-package com.holeman79.shoppingbackend.auth;
+package com.holeman79.shoppingbackend.user;
 
 import com.holeman79.shoppingbackend.common.domain.Role;
 import com.holeman79.shoppingbackend.common.domain.RoleName;
@@ -28,7 +28,7 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class UserController {
     @Autowired
     AuthenticationManager authenticationManager;
 
