@@ -1,9 +1,7 @@
 package com.holeman79.shoppingbackend.order.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.holeman79.shoppingbackend.common.domain.OrderStatus;
+import com.holeman79.shoppingbackend.order.domain.enums.OrderStatusType;
 import com.holeman79.shoppingbackend.product.domain.Color;
 import com.holeman79.shoppingbackend.product.domain.Product;
 import com.holeman79.shoppingbackend.product.domain.Size;
@@ -38,5 +36,5 @@ public class OrderItem {
     private Size size;
     private int number;
 
-    private OrderStatus orderStatus;
+    private OrderStatusType orderStatusType;
 }

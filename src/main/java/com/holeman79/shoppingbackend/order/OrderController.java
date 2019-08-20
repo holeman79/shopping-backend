@@ -7,7 +7,6 @@ import com.holeman79.shoppingbackend.order.domain.PhoneFirstNumberType;
 import com.holeman79.shoppingbackend.order.repository.BankBookRepository;
 import com.holeman79.shoppingbackend.order.repository.PaymentRepository;
 import com.holeman79.shoppingbackend.order.repository.PhoneFirstNumberTypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +18,22 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/order")
 public class OrderController {
-    @Autowired
-    OrderService orderService;
 
-    @Autowired
-    PaymentRepository paymentRepository;
+    private final OrderService orderService;
 
-    @Autowired
-    BankBookRepository bankBookRepository;
+    private final PaymentRepository paymentRepository;
 
-    @Autowired
-    PhoneFirstNumberTypeRepository phoneFirstNumberTypeRepository;
+    private final BankBookRepository bankBookRepository;
+
+    private final PhoneFirstNumberTypeRepository phoneFirstNumberTypeRepository;
+
+    public OrderController(OrderService orderService, PaymentRepository paymentRepository,
+                           BankBookRepository bankBookRepository, PhoneFirstNumberTypeRepository phoneFirstNumberTypeRepository){
+        this.orderService = orderService;
+        this.paymentRepository = paymentRepository;
+        this.bankBookRepository = bankBookRepository;
+        this.phoneFirstNumberTypeRepository = phoneFirstNumberTypeRepository;
+    }
     @GetMapping("/option")
     public ResponseEntity<?> getOptionList(){
         Map result = new HashMap();

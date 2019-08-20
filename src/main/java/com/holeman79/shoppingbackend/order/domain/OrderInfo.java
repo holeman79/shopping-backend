@@ -1,6 +1,5 @@
 package com.holeman79.shoppingbackend.order.domain;
 
-import com.holeman79.shoppingbackend.product.domain.Product;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,7 +34,9 @@ public class OrderInfo {
 
     private int totalPrice;
 
-    private String username;
+    private String userId;
+
+    private String name;
 
     @OneToMany(mappedBy = "orderInfo", cascade=CascadeType.ALL)
     private List<OrderItem> orderItems;

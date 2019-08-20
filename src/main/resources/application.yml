@@ -14,6 +14,7 @@ spring:
     driverClassName: org.h2.Driver
     data: classpath:/data-commoncode.sql, classpath:/data-product.sql, classpath:/data-productFiles.sql
   jpa:
+    show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
@@ -27,10 +28,39 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
       fail-on-empty-beans: false
     time-zone: UTC
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 759946731112-k66csn4mvn3fu4emmhb0nu01orjo1lns.apps.googleusercontent.com
+            client-secret: 61cen7gFdOocEuk5tF6_0qLE
+            #redirectUriTemplate: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - profile
+              - email
+          facebook:
+            client-id: 454459275137411
+            client-secret: 9cb848b94908d208099864386a0bd6be
+            scope:
+              - email
+              - public_profile
+              - picture
+
+custom:
+  oauth2:
+    kakao:
+      client-id: 15eaf0f4fcbaf0264af195593fdbcb50
+      scope:
+        - profile
+
 
 app:
   jwtSecret: JWTSuperSecretKey
   jwtExpirationInMs: 6000000 #100분
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
 
 ##spring.servlet.multipart.max-file-size=128KB
 ##spring.servlet.multipart.max-request-size=128KB

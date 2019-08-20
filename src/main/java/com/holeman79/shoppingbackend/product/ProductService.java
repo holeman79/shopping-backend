@@ -1,11 +1,10 @@
 package com.holeman79.shoppingbackend.product;
 
-import com.holeman79.shoppingbackend.common.file.*;
+import com.holeman79.shoppingbackend.file.UploadFileUtils;
 import com.holeman79.shoppingbackend.product.domain.Option;
 import com.holeman79.shoppingbackend.product.domain.Product;
 import com.holeman79.shoppingbackend.product.domain.ProductDetailFile;
 import com.holeman79.shoppingbackend.product.domain.ProductFile;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,11 +20,15 @@ import java.util.List;
 
 @Service
 public class ProductService {
-    @Autowired
-    ProductRepository productRepository;
+
+    private final ProductRepository productRepository;
 
     @Value("${property.uploadPath}")
     private String uploadPath;
+
+    public ProductService(ProductRepository productRepository){
+        this.productRepository = productRepository;
+    }
 
     @Transactional
     public Product addProduct(Product product, MultipartFile file, MultipartFile[] detailFiles) throws Exception{

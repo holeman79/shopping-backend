@@ -38,9 +38,9 @@ insert into PHONE_FIRST_NUMBER_TYPE(code, number_order) values('016', 3);
 insert into PHONE_FIRST_NUMBER_TYPE(code, number_order) values('017', 4);
 insert into PHONE_FIRST_NUMBER_TYPE(code, number_order) values('019', 5);
 
-insert into USERS(id, username, email, password) values(1, 'holeman90', 'holeman79@nate.com', '$2a$10$o.q9d5/Oq0b2oYCk09X56uux8RQ6pAEA5OzUpOyKO.WvOe8Ybvsa6');
-INSERT INTO ROLES(id, name) VALUES(1, 'ROLE_USER');
-INSERT INTO ROLES(id, name) VALUES(2, 'ROLE_ADMIN');
+insert into USERS(id, user_id, name, email, password, created_date, updated_date) values(1, 'holeman90', '조원진', 'holeman79@nate.com', '$2a$10$o.q9d5/Oq0b2oYCk09X56uux8RQ6pAEA5OzUpOyKO.WvOe8Ybvsa6', sysdate, sysdate);
+INSERT INTO ROLES(id, name) VALUES(1, 'USER');
+INSERT INTO ROLES(id, name) VALUES(2, 'ADMIN');
 
 insert into USER_ROLES(user_id, role_id) values(1, 1);
 

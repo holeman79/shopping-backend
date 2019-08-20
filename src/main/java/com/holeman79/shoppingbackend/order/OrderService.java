@@ -1,14 +1,12 @@
 package com.holeman79.shoppingbackend.order;
 
-import com.holeman79.shoppingbackend.common.domain.OrderStatus;
-import com.holeman79.shoppingbackend.common.util.OrderNoGenerator;
 import com.holeman79.shoppingbackend.order.domain.OrderInfo;
 import com.holeman79.shoppingbackend.order.domain.OrderItem;
+import com.holeman79.shoppingbackend.order.domain.enums.OrderStatusType;
 import com.holeman79.shoppingbackend.order.repository.OrderInfoRepository;
+import com.holeman79.util.OrderNoGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class OrderService {
@@ -20,11 +18,10 @@ public class OrderService {
         orderInfo.setOrderNo(orderNo);
         for(OrderItem orderItem : orderInfo.getOrderItems()){
             orderItem.setOrderInfo(orderInfo);
-            orderItem.setOrderStatus(OrderStatus.PREPARING_PRODUCT);
+            orderItem.setOrderStatusType(OrderStatusType.PREPARING_PRODUCT);
         }
 
         OrderInfo savedOrderInfo = orderInfoRepository.save(orderInfo);
-
         return savedOrderInfo;
     }
 }
