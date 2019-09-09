@@ -72,4 +72,4 @@ logging:
         SQL: DEBUG
 
 property:
-  uploadPath: C:\\upload
+  imagesPath: application_images

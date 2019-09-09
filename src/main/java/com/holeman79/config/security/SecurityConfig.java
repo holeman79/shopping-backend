@@ -5,8 +5,7 @@ import com.holeman79.config.security.oauth2.HttpCookieOAuth2AuthorizationRequest
 import com.holeman79.config.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.holeman79.shoppingbackend.user.CustomOAuth2UserService;
 import com.holeman79.shoppingbackend.user.CustomUserDetailsService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
@@ -36,6 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -44,7 +44,6 @@ import java.util.stream.Collectors;
         prePostEnabled = true
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
-    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     @Autowired
     CustomUserDetailsService customUserDetailsService;
@@ -67,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, authException) -> {
-            logger.error("Responding with unauthorized error. Message - {}", authException.getMessage());
+            log.error("Responding with unauthorized error. Message - {}", authException.getMessage());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
         };
     }
@@ -75,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return (request, response, accessDeniedException) -> {
-            logger.error("Responding with fobidden error. Message - {}", accessDeniedException.getMessage());
+            log.error("Responding with fobidden error. Message - {}", accessDeniedException.getMessage());
             response.sendError(HttpServletResponse.SC_FORBIDDEN, accessDeniedException.getMessage());
         };
     }

@@ -1,4 +1,4 @@
-package com.holeman79.shoppingbackend.user;
+package com.holeman79.shoppingbackend.user.repository;
 
 import com.holeman79.shoppingbackend.user.domain.Role;
 import com.holeman79.shoppingbackend.user.domain.enums.RoleType;

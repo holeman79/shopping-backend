@@ -1,6 +1,5 @@
 package com.holeman79.config.security.oauth2;
 
-import com.holeman79.config.constant.Constant;
 import com.holeman79.config.security.JwtTokenProvider;
 import com.holeman79.shoppingbackend.user.domain.User;
 import com.holeman79.util.CookieUtils;
@@ -20,7 +19,7 @@ import java.util.Optional;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
+    public static final String ACCESS_TOKEN = "access_token";
     private JwtTokenProvider tokenProvider;
 
     @Autowired
@@ -41,13 +40,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        Optional<String> redirectUri = CookieUtils.getCookie(request, Constant.REDIRECT_URI_PARAM_COOKIE_NAME)
+        Optional<String> redirectUri = CookieUtils.getCookie(request, HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         User user = (User) authentication.getPrincipal();
         String token = tokenProvider.generateToken(user.getId());
-        CookieUtils.addCookie(response, Constant.TOKEN, token, 60 * 60 * 24);
+        CookieUtils.addCookie(response, ACCESS_TOKEN, token, 60 * 60 * 24);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)

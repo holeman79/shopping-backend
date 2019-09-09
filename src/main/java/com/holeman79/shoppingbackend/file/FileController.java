@@ -1,7 +1,6 @@
 package com.holeman79.shoppingbackend.file;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,8 +15,6 @@ import java.io.InputStream;
 @RestController
 @RequestMapping("/api/file")
 public class FileController {
-    @Value("${property.uploadPath}")
-    private String uploadPath;
 
     @GetMapping
     public ResponseEntity<byte[]> displayFile(String fileName) throws Exception {

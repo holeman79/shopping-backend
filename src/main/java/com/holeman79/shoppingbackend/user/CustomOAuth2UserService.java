@@ -6,6 +6,8 @@ import com.holeman79.shoppingbackend.user.domain.User;
 import com.holeman79.shoppingbackend.user.domain.enums.RoleType;
 import com.holeman79.shoppingbackend.user.domain.enums.SocialType;
 import com.holeman79.shoppingbackend.user.domain.oauth2.OAuth2UserInfo;
+import com.holeman79.shoppingbackend.user.repository.RoleRepository;
+import com.holeman79.shoppingbackend.user.repository.UserRepository;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

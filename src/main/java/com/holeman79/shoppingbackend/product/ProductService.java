@@ -5,7 +5,7 @@ import com.holeman79.shoppingbackend.product.domain.Option;
 import com.holeman79.shoppingbackend.product.domain.Product;
 import com.holeman79.shoppingbackend.product.domain.ProductDetailFile;
 import com.holeman79.shoppingbackend.product.domain.ProductFile;
-import org.springframework.beans.factory.annotation.Value;
+import com.holeman79.shoppingbackend.product.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,9 +23,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    @Value("${property.uploadPath}")
-    private String uploadPath;
-
     public ProductService(ProductRepository productRepository){
         this.productRepository = productRepository;
     }
@@ -41,22 +38,20 @@ public class ProductService {
             option.setProduct(savedProduct);
         }
 
-        String directory = UploadFileUtils.makeDirectoryByCategory(uploadPath, savedProduct);
-        String savedFileName = UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes(), directory);
+        String directory = UploadFileUtils.makeDirectoryByCategory(savedProduct);
+        String savedFileName = UploadFileUtils.uploadFile(file.getOriginalFilename(), file.getBytes(), directory);
         ProductFile productFile = new ProductFile();
-        productFile.setUploadPath(uploadPath);
         productFile.setDirectory(directory);
         productFile.setOriginalFileName(file.getOriginalFilename());
         productFile.setSavedFileName(savedFileName);
         productFile.setFileSize(file.getSize());
         productFile.setProduct(savedProduct);
-        productFile.setThumbnailSavedFileName(UploadFileUtils.makeThumbnail(uploadPath, directory, savedFileName, 500));
+        productFile.setThumbnailSavedFileName(UploadFileUtils.makeThumbnail(directory, savedFileName, 500));
         savedProduct.setProductFile(productFile);
 
         for(MultipartFile detailFile : detailFiles){
-            savedFileName = UploadFileUtils.uploadFile(uploadPath, detailFile.getOriginalFilename(), detailFile.getBytes(), directory);
+            savedFileName = UploadFileUtils.uploadFile(detailFile.getOriginalFilename(), detailFile.getBytes(), directory);
             ProductDetailFile productDetailFile = new ProductDetailFile();
-            productDetailFile.setUploadPath(uploadPath);
             productDetailFile.setDirectory(directory);
             productDetailFile.setOriginalFileName(detailFile.getOriginalFilename());
             productDetailFile.setSavedFileName(savedFileName);

@@ -1,23 +1,31 @@
 package com.holeman79.shoppingbackend.file;
 
 import com.holeman79.shoppingbackend.product.domain.Product;
-import org.apache.commons.io.IOUtils;
 import org.imgscalr.Scalr;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.FileCopyUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.text.DecimalFormat;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 public class UploadFileUtils {
-    public static String uploadFile(String uploadPath, String originalName, byte[] fileData, String directory) throws Exception {
+    @Value("${property.imagesPath}")
+    private static String imagesPath;
+    private static String defaultPath = System.getProperty("user.home") + File.separator + imagesPath;
+
+    public static String uploadFile(String originalName, byte[] fileData, String directory) throws Exception {
 
         //겹쳐지지 않는 파일명을 위한 유니크한 값 생성
         UUID uid = UUID.randomUUID();
@@ -27,10 +35,10 @@ public class UploadFileUtils {
 
         if(directory == null)
             //파일을 저장할 폴더 생성(년 월 일 기준)
-            directory = makeDirectoryByCalendar(uploadPath);
+            directory = makeDirectoryByCalendar();
 
         //저장할 파일준비
-        File target = new File(uploadPath + directory, savedName);
+        File target = new File(directory + File.separator, savedName);
 
         //파일을 저장
         FileCopyUtils.copy(fileData, target);
@@ -44,71 +52,56 @@ public class UploadFileUtils {
         return savedName;
     }
 
-    private static String makeDirectoryByCalendar(String uploadPath) {
-        Calendar cal = Calendar.getInstance();
-        String yearPath = File.separator + cal.get(Calendar.YEAR);
-        String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH)+1);
-        String datePath = monthPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.DATE));
-        makeDir(uploadPath, yearPath, monthPath, datePath);
+    private static String makeDirectoryByCalendar() throws IOException {
+        LocalDate localDate = LocalDate.now();
+        String datePath = defaultPath + File.separator + localDate.getYear() + new DecimalFormat("00").format(localDate.getMonthValue())
+                + new DecimalFormat("00").format(localDate.getDayOfMonth());
 
-        return datePath + File.separator;
+        Set<PosixFilePermission> permis = PosixFilePermissions.fromString("rwxrwxr-x");
+        // 파일 속성
+        FileAttribute<Set<PosixFilePermission>> attrib= PosixFilePermissions.asFileAttribute(permis);
+        Path path = Paths.get(datePath);
+        Files.createDirectories(path, attrib);
+
+        return datePath;
     }
 
-    public static String makeDirectoryByCategory(String uploadPath, Product product) {
-        String imagesPath = File.separator + "images";
-        String productsPath = imagesPath + File.separator + "products";
+    public static String makeDirectoryByCategory(Product product) throws IOException {
+        String productsPath = defaultPath + File.separator + "products";
         String categoryPath = productsPath + File.separator + product.getCategory().getCode();
         String productTitlePath = categoryPath + File.separator + product.getId() + "." + product.getTitle();
-        makeDir(uploadPath, imagesPath, productsPath, categoryPath, productTitlePath);
 
-        return productTitlePath + File.separator;
+        // linux 이미지 저장방법1
+        File targetFile = new File(productTitlePath);
+        targetFile.setReadable(true, true);
+        targetFile.setWritable(true, true);
+        targetFile.setExecutable(true, true);
+        boolean result = targetFile.mkdirs();
+
+        // linux 이미지 저장방법2
+//        // 디렉토리 권한 설정
+//        Set<PosixFilePermission> permis = PosixFilePermissions.fromString("rwxrwxr-x");
+////        // 파일 속성
+//        FileAttribute<Set<PosixFilePermission>> attrib= PosixFilePermissions.asFileAttribute(permis);
+//        Path path = Paths.get(productTitlePath);
+//        Files.createDirectories(path, attrib);
+
+        return productTitlePath;
     }
 
-    //폴더 생성 함수
-    private static void makeDir(String uploadPath, String... paths) {
-        if(new File(uploadPath + paths[paths.length -1]).exists()) {
-            return;
-        }
-        for(String path : paths) {
-            File dirPath = new File(uploadPath + path);
-            if(!dirPath.exists()) {
-                dirPath.mkdir();
-            }
-        }
-    }
 
     //썸네일 이미지 생성
-    public static String makeThumbnail(String uploadPath, String directory, String fileName, int size) throws Exception {
+    public static String makeThumbnail(String directory, String fileName, int size) throws Exception {
 
-        BufferedImage sourceImg = ImageIO.read(new File(uploadPath + directory, fileName));
+        BufferedImage sourceImg = ImageIO.read(new File(directory, fileName));
         BufferedImage destImg = Scalr.resize(sourceImg, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, size);
 
-        String thumbnailName = uploadPath + directory + File.separator + "Thumbnail_" + fileName;
+        String thumbnailName = directory + File.separator + "Thumbnail_" + fileName;
 
         File newFile = new File(thumbnailName);
         String formatName = fileName.substring(fileName.lastIndexOf(".")+1);
 
         ImageIO.write(destImg, formatName.toUpperCase(), newFile);
-        //return thumbnailName.substring(uploadPath.length()).replace(File.separatorChar, '/');
         return "Thumbnail_" + fileName;
     }
-
-    public static void fileCopy(String inFileName, String outFileName) {
-        try {
-            FileInputStream fis = new FileInputStream(inFileName);
-            FileOutputStream fos = new FileOutputStream(outFileName);
-
-            int data = 0;
-            while((data=fis.read())!=-1) {
-                fos.write(data);
-            }
-            fis.close();
-            fos.close();
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
 }

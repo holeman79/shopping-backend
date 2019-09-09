@@ -1,11 +1,10 @@
 package com.holeman79.shoppingbackend.user.domain.oauth2;
 
 
-import com.holeman79.config.constant.Constant;
-
 import java.util.Map;
 
 public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
+    public static final String FACEBOOK_GRAPH_URL = "https://graph.facebook.com";
     public FacebookOAuth2UserInfo(Map<String, Object> attributes) {
         super(attributes);
     }
@@ -27,6 +26,6 @@ public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
 
     @Override
     public String getImageUrl() {
-        return Constant.FACEBOOK_GRAPH_URL + "/" + (String) attributes.get("id") + "/picture?type=large";
+        return FACEBOOK_GRAPH_URL + "/" + (String) attributes.get("id") + "/picture?type=large";
     }
 }

@@ -1,7 +1,7 @@
 package com.holeman79.config.security.oauth2;
 
-import com.holeman79.exception.ExceptionMessageType;
-import com.holeman79.exception.OAuth2AuthenticationProcessingException;
+import com.holeman79.exception.ErrorCode;
+import com.holeman79.exception.OAuth2AuthenticationException;
 import com.holeman79.shoppingbackend.user.domain.oauth2.*;
 
 import java.util.Map;
@@ -20,7 +20,7 @@ public class OAuth2UserInfoFactory {
         }else if (registrationId.equalsIgnoreCase(KAKAO.getValue())) {
             return new KakaoOAuth2UserInfo(attributes);
         }else {
-            throw new OAuth2AuthenticationProcessingException(registrationId + " " + ExceptionMessageType.NOT_SUPPORTED.getValue());
+            throw new OAuth2AuthenticationException(ErrorCode.SOCIAL_TYPE_NOT_EXIST);
         }
     }
 }
