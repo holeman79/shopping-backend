@@ -2,6 +2,7 @@ package com.holeman79.shoppingbackend.user.domain.enums;
 
 public enum RoleType {
     USER("user"),
+    SELLER("seller"),
     ADMIN("admin");
 
     private final String ROLE_PREFIX = "ROLE_";

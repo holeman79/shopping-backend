@@ -16,9 +16,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -50,11 +48,9 @@ public class User implements UserDetails, OAuth2User {
 
     private String socialId;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name="role_id")
+    private Role role;
 
     @Transient
     private Map<String, Object> attributes;
@@ -85,7 +81,7 @@ public class User implements UserDetails, OAuth2User {
         this.imageUrl = imageUrl;
         this.socialType = socialType;
         this.socialId = socialId;
-        this.roles.add(role);
+        this.role = role;
         this.attributes = attributes;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
@@ -93,7 +89,7 @@ public class User implements UserDetails, OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return null;
     }
 
     @Override

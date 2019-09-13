@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Optional;
 
 @RestController
@@ -62,7 +61,7 @@ public class UserController {
                 .name(user.get().getName())
                 .imageUrl(user.get().getImageUrl())
                 .accessToken(accessToken)
-                .roles(user.get().getRoles())
+                .role(user.get().getRole())
                 .build(), HttpStatus.OK);
     }
 
@@ -84,7 +83,7 @@ public class UserController {
                 .name(user.getName())
                 .imageUrl(user.getImageUrl())
                 .accessToken(accessToken)
-                .roles(user.getRoles())
+                .role(user.getRole())
                 .build(), HttpStatus.OK);
     }
     @PostMapping("/signup")
@@ -96,7 +95,7 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedDate(LocalDateTime.now());
         Role userRole = new Role(RoleType.USER);
-        user.setRoles(Collections.singleton(userRole));
+        user.setRole(userRole);
         User result = userRepository.save(user);
 
         return new ResponseEntity<>(HttpStatus.OK);
