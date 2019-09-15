@@ -23,7 +23,7 @@ import java.util.UUID;
 public class UploadFileUtils {
     @Value("${property.imagesPath}")
     private static String imagesPath;
-    private static String defaultPath = System.getProperty("user.home") + File.separator + imagesPath;
+    private static String defaultPath = System.getProperty("user.home");
 
     public static String uploadFile(String originalName, byte[] fileData, String directory) throws Exception {
 
@@ -86,7 +86,7 @@ public class UploadFileUtils {
 //        Path path = Paths.get(productTitlePath);
 //        Files.createDirectories(path, attrib);
 
-        return productTitlePath;
+        return productTitlePath + File.separator;
     }
 
 

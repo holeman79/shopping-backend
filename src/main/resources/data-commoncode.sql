@@ -24,7 +24,7 @@ INSERT INTO CATEGORY(code, name) VALUES('accessory', '악세사리');
 INSERT INTO CATEGORY(code, name) VALUES('etc', '기타잡화');
 
 insert into PAYMENT_WAY(code, name) values('no_bankbook', '무통장입금');
-insert into PAYMENT_WAY(code, name) values('credit_card', '신용카드');
+insert into PAYMENT_WAY(code, name) values('kakaopay', '카카오페이');
 insert into PAYMENT_WAY(code, name) values('bank_transfer', '계좌이체');
 insert into PAYMENT_WAY(code, name) values('phone', '핸드폰 소액결제');
 
