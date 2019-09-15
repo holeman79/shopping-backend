@@ -1,0 +1,47 @@
+@import "../../../styles/utils";
+
+.order-info-header{
+  margin-top: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top: 2px solid $oc-gray-9;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.order-info-content{
+  display: flex;
+  flex-direction: column;
+  .order-info-list {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    .term{
+      min-width: 15rem;
+      box-sizing: border-box;
+    }
+    .description{
+      word-wrap: break-word;
+      word-break: break-word;
+    }
+    .input{
+      margin: .5em;
+      font-size: 0.7em;
+      padding: .5em;
+      border: 1px solid #ccc;
+      border-color: #dbdbdb #d2d2d2 #d0d0d0 #d2d2d3;
+      box-shadow: inset 0.1em 0.1em 0.15em rgba(0,0,0,.1);
+      vertical-align: middle;
+      line-height: 1.25em;
+      outline: 0;
+    }
+    .order-info-sub{
+      display: flex;
+      flex-direction: column;
+     .order-info-postcode{
+       display: flex;
+     }
+    }
+  }
+}

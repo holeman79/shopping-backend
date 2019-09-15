@@ -1,0 +1,15 @@
+@import "../../../styles/utils";
+
+input[type=file] {
+  visibility: hidden;
+  position: absolute
+}
+
+.fileUpload-button{
+  display: flex;
+  align-items: center;
+  .text {
+
+    text-align: center;
+  }
+}

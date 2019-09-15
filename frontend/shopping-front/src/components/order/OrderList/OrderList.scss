@@ -1,0 +1,45 @@
+@import "../../../styles/utils";
+
+.order-list-header{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top: 2px solid $oc-gray-9;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.order-list-content{
+  display: flex;
+  flex-direction: column;
+  .order-item {
+    border-top: 1px solid $oc-gray-3;
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    img{
+      width: 10%;
+    }
+    .order-content{
+      padding: 1rem;
+      flex: 1;
+      border-right: 1px solid $oc-gray-3;
+    }
+    .order-option{
+      padding: 1rem;
+      font-size: 1rem;
+      color: $oc-gray-7;
+    }
+    .order-amount{
+      padding: 1rem;
+      font-size: 1rem;
+      color: $oc-gray-7;
+    }
+    .order-price{
+      padding: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: $oc-gray-7;
+    }
+  }
+}

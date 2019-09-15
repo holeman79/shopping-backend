@@ -1,0 +1,15 @@
+@import "../../../styles/utils";
+
+.pagination {
+  margin-top: 2rem;
+
+  display: flex;
+  align-itmes: center;
+
+  .number{
+    font-size: 0.79rem;
+    text-align: center;
+    color: $oc-gray-6;
+    flex: 1;
+  }
+}
