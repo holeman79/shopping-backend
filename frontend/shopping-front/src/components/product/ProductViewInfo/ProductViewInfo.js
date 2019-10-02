@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import styles from './ProductViewInfo.scss';
 import classNames from 'classnames/bind';
-import xButton from "resources/images/xButton.PNG";
 import * as constants from "constants/Constants";
 
 const cx = classNames.bind(styles);
@@ -42,7 +41,7 @@ class ProductViewInfo extends Component {
                 <div key={index} className={cx('order-option', 'text')}>
                     <div className={cx('item')}>옵션: {orderOption.get('color').get('name')} / {orderOption.get('size').get('name')}</div>
                     <div className={cx('item')}>수량: <input name='number' value={orderOption.get('number')} defaultValue={1} className={cx('input-text')} onChange={(e) => onChangeOrderProductNumber({e, index})}/>개</div>
-                    <div className={cx('item')}><button onClick={() => onDeleteOption(index)}><img src={xButton}/></button></div>
+                    <div className={cx('item')}><button onClick={() => onDeleteOption(index)}><img src="http://localhost:5050/xButton.png"/></button></div>
                 </div>
             )
         );
