@@ -10,6 +10,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@Table(name = "tb_product_file")
 public class ProductFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

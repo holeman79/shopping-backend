@@ -7,11 +7,12 @@ import com.holeman79.exception.OAuth2AuthenticationException;
 import com.holeman79.exception.UserDuplException;
 import com.holeman79.shoppingbackend.payload.LoginRequest;
 import com.holeman79.shoppingbackend.payload.UserResponse;
-import com.holeman79.shoppingbackend.user.domain.Role;
 import com.holeman79.shoppingbackend.user.domain.User;
 import com.holeman79.shoppingbackend.user.domain.enums.RoleType;
+import com.holeman79.shoppingbackend.user.repository.RoleRepository;
 import com.holeman79.shoppingbackend.user.repository.UserRepository;
 import com.holeman79.util.CookieUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +31,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserController {
 
     private final AuthenticationManager authenticationManager;
@@ -40,13 +42,8 @@ public class UserController {
 
     private final UserRepository userRepository;
 
-    UserController(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider
-            ,UserRepository userRepository){
-        this.authenticationManager = authenticationManager;
-        this.passwordEncoder = passwordEncoder;
-        this.tokenProvider = tokenProvider;
-        this.userRepository = userRepository;
-    }
+    private final RoleRepository roleRepository;
+
     @GetMapping("/oauth")
     public ResponseEntity<UserResponse> getUser(HttpServletRequest request, HttpServletResponse response){
         String accessToken = CookieUtils.getCookie(request, OAuth2AuthenticationSuccessHandler.ACCESS_TOKEN)
@@ -94,8 +91,7 @@ public class UserController {
         // Creating user's account
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedDate(LocalDateTime.now());
-        Role userRole = new Role(RoleType.USER);
-        user.setRole(userRole);
+        user.setRole(roleRepository.findByName(RoleType.USER).orElse(null));
         User result = userRepository.save(user);
 
         return new ResponseEntity<>(HttpStatus.OK);

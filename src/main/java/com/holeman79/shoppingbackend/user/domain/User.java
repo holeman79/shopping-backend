@@ -21,7 +21,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
+@Table(name = "tb_user")
 public class User implements UserDetails, OAuth2User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

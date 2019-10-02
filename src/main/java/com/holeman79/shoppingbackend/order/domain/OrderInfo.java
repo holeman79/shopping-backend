@@ -9,6 +9,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "tb_order_info")
 public class OrderInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

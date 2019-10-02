@@ -1,12 +1,11 @@
 package com.holeman79.config.security;
 
 import com.holeman79.config.security.oauth2.CustomOAuth2Provider;
-import com.holeman79.config.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.holeman79.config.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.holeman79.shoppingbackend.user.CustomOAuth2UserService;
 import com.holeman79.shoppingbackend.user.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
@@ -43,25 +42,16 @@ import java.util.stream.Collectors;
         jsr250Enabled = true,
         prePostEnabled = true
 )
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
-    @Autowired
-    CustomUserDetailsService customUserDetailsService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
-    @Autowired
-    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-    @Autowired
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
-    }
-
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
@@ -117,8 +107,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                         "/swagger*/**", "/**/api-docs", "/**/ui", "/configuration/**",
                         "/**/*.html*", "/**/*.css", "/**/*.js", "/**/*.json")
                         .permitAll()
+                    .antMatchers("/category/**", "/product/**", "/login", "/signup", "/order/**", "/oauth2/redirect")
+                        .permitAll()
                     .antMatchers("/api/user/**")
                         .permitAll()
+
                     .antMatchers(HttpMethod.GET,"/api/product/option")
                         .authenticated()
                     .antMatchers(HttpMethod.GET,"/api/product/**")
@@ -135,7 +128,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .oauth2Login()
                     .authorizationEndpoint()
                         .baseUri("/oauth2/authorization")
-                        .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository)
                         .and()
                     .redirectionEndpoint()
                         .baseUri("/login/oauth2/code/*")
@@ -148,7 +140,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .headers()
                     .frameOptions().disable()
                     .and()
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 

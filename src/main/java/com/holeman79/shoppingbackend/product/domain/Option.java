@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "tb_option")
 public class Option{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

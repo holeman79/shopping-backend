@@ -3,6 +3,7 @@ package com.holeman79.shoppingbackend.file;
 import com.holeman79.shoppingbackend.product.domain.Product;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import javax.imageio.ImageIO;
@@ -20,10 +21,16 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
+@Component
 public class UploadFileUtils {
-    @Value("${property.imagesPath}")
+
     private static String imagesPath;
     private static String defaultPath = System.getProperty("user.home");
+
+    @Value("${imagesPath}")
+    private void setImagesPath(String imagesPath){
+        this.imagesPath = imagesPath;
+    }
 
     public static String uploadFile(String originalName, byte[] fileData, String directory) throws Exception {
 
@@ -67,7 +74,7 @@ public class UploadFileUtils {
     }
 
     public static String makeDirectoryByCategory(Product product) throws IOException {
-        String productsPath = defaultPath + File.separator + "products";
+        String productsPath = defaultPath + File.separator + imagesPath;
         String categoryPath = productsPath + File.separator + product.getCategory().getCode();
         String productTitlePath = categoryPath + File.separator + product.getId() + "." + product.getTitle();
 

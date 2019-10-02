@@ -7,6 +7,7 @@ import com.holeman79.shoppingbackend.product.domain.Size;
 import com.holeman79.shoppingbackend.product.repository.CategoryRepository;
 import com.holeman79.shoppingbackend.product.repository.ColorRepository;
 import com.holeman79.shoppingbackend.product.repository.SizeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/product")
+@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
@@ -30,14 +32,6 @@ public class ProductController {
     private final SizeRepository sizeRepository;
 
     private final CategoryRepository categoryRepository;
-
-    public ProductController(ProductService productService, ColorRepository colorRepository,
-                             SizeRepository sizeRepository, CategoryRepository categoryRepository){
-        this.productService = productService;
-        this.colorRepository = colorRepository;
-        this.sizeRepository = sizeRepository;
-        this.categoryRepository = categoryRepository;
-    }
 
     @GetMapping("/category")
     public ResponseEntity<?> getCategoryList(){
