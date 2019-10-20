@@ -1,0 +1,76 @@
+server:
+  port: 5050
+#  servlet:
+#    session:
+#      timeout: 10m
+
+spring:
+  datasource:
+    url: jdbc:mysql://faso_databse:3306/faso?serverTimezone=Asia/Seoul
+    #platform: mysql
+    username: holeman79
+    password: 1234
+    driverClassName: com.mysql.cj.jdbc.Driver
+    #data: classpath:/data-commoncode.sql, classpath:/data-product.sql, classpath:/data-productFiles.sql
+  jpa:
+    #show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        show-sql: true
+        use_sql_comments: true
+        format_sql: true
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+      fail-on-empty-beans: false
+    time-zone: UTC
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 759946731112-k66csn4mvn3fu4emmhb0nu01orjo1lns.apps.googleusercontent.com
+            client-secret: 61cen7gFdOocEuk5tF6_0qLE
+            #redirectUriTemplate: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - profile
+              - email
+          facebook:
+            client-id: 454459275137411
+            client-secret: 9cb848b94908d208099864386a0bd6be
+            scope:
+              - email
+              - public_profile
+              - picture
+
+custom:
+  oauth2:
+    kakao:
+      client-id: 15eaf0f4fcbaf0264af195593fdbcb50
+      scope:
+        - profile
+
+
+app:
+  jwtSecret: JWTSuperSecretKey
+  jwtExpirationInMs: 6000000 #100분
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
+
+##spring.servlet.multipart.max-file-size=128KB
+##spring.servlet.multipart.max-request-size=128KB
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+
+
+imagesPath: fashion-society
