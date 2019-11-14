@@ -47,11 +47,12 @@ export default handleActions({
     ...pender({
         type: LOGIN,
         onSuccess: (state, action) => {
-            const { id, name, imageUrl, role, accessToken, tokenType } = action.payload.data;
+            const { id, name, imageUrl, roleType, accessToken, tokenType } = action.payload.data;
+            debugger;
             sessionStorage.setItem("id", id);
             sessionStorage.setItem("name", name);
             sessionStorage.setItem("imageUrl", imageUrl);
-            sessionStorage.setItem("role", role.name);
+            sessionStorage.setItem("role", roleType);
             sessionStorage.setItem('accessToken', accessToken);
             sessionStorage.setItem('tokenType', tokenType);
             sessionStorage.logged = true;

@@ -1,6 +1,6 @@
 package com.holeman79.shoppingbackend.payload;
 
-import com.holeman79.shoppingbackend.user.domain.Role;
+import com.holeman79.shoppingbackend.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,15 +12,15 @@ public class UserResponse {
     private String userId;
     private String accessToken;
     private String tokenType = "Bearer";
-    private Role role;
+    private User.RoleType roleType;
 
     @Builder
-    public UserResponse(Long id, String userId, String name, String imageUrl, String accessToken, Role role){
+    public UserResponse(Long id, String userId, String name, String imageUrl, String accessToken, User.RoleType roleType){
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.imageUrl = imageUrl;
         this.accessToken = accessToken;
-        this.role = role;
+        this.roleType = roleType;
     }
 }

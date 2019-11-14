@@ -31,8 +31,8 @@ public class StaticResourceConfig implements WebMvcConfigurer {
                 .setViewName("forward:/");
     }
 
-    @Bean
-    public MultipartResolver multipartResolvers() {
-        return new StandardServletMultipartResolver();
-    }
+//    @Bean
+//    public MultipartResolver multipartResolvers() {
+//        return new StandardServletMultipartResolver();
+//    }
 }

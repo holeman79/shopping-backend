@@ -1,13 +1,11 @@
 package com.holeman79.shoppingbackend.user;
 
 import com.holeman79.config.security.oauth2.OAuth2UserInfoFactory;
-import com.holeman79.shoppingbackend.user.domain.Role;
 import com.holeman79.shoppingbackend.user.domain.User;
-import com.holeman79.shoppingbackend.user.domain.enums.RoleType;
-import com.holeman79.shoppingbackend.user.domain.enums.SocialType;
+import com.holeman79.shoppingbackend.generic.code.SocialType;
 import com.holeman79.shoppingbackend.user.domain.oauth2.OAuth2UserInfo;
-import com.holeman79.shoppingbackend.user.repository.RoleRepository;
 import com.holeman79.shoppingbackend.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -20,16 +18,10 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-
-    private final RoleRepository roleRepository;
-
-    public CustomOAuth2UserService(UserRepository userRepository, RoleRepository roleRepository){
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -51,11 +43,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo){
-        Optional<Role> role = roleRepository.findByName(RoleType.USER);
         User user = User.builder()
                 .socialType(SocialType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()))
                 .socialId(oAuth2UserInfo.getId())
-                .role(role.orElse(null))
+                .roleType(User.RoleType.USER)
                 .name(oAuth2UserInfo.getName())
                 .email(oAuth2UserInfo.getEmail())
                 .imageUrl(oAuth2UserInfo.getImageUrl())

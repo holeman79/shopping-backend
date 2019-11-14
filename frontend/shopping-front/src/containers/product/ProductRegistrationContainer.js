@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ProductRegistrationInfo from 'components/product/ProductRegistrationInfo';
+import ProductRegistrationInfo from 'components/product/ProductRegistrationHeader';
 import ProductRegistrationBody from 'components/product/ProductRegistrationBody';
 import Notifications, { notify } from 'react-notify-toast';
 import * as constants from "constants/Constants";
@@ -85,7 +85,7 @@ class ProductRegistrationContainer extends Component {
             return;
         }
 
-        product = product.set('createdId', sessionStorage.getItem('id'));
+        product = product.set('userId', sessionStorage.getItem('id'));
         let formData = new FormData();
         formData.append('productFile', productImage);
         formData.append('product', new Blob([JSON.stringify(product)], {

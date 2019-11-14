@@ -6,7 +6,7 @@ import com.holeman79.shoppingbackend.user.domain.oauth2.*;
 
 import java.util.Map;
 
-import static com.holeman79.shoppingbackend.user.domain.enums.SocialType.*;
+import static com.holeman79.shoppingbackend.generic.code.SocialType.*;
 
 public class OAuth2UserInfoFactory {
 

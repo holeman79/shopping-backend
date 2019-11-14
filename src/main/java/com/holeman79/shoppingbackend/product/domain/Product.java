@@ -1,42 +1,56 @@
 package com.holeman79.shoppingbackend.product.domain;
 
+import com.holeman79.shoppingbackend.generic.code.Category;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_product")
+@Table(name = "PRODUCTS")
 public class Product{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="PRODUCT_ID")
     private Long id;
-    private String title;
 
-    @ManyToOne
-    @JoinColumn(name="category_code")
+    @Column(name="PRODUCT_NAME")
+    private String name;
+
+    @Column(name="CATEGORY_TYPE")
+    @Enumerated(EnumType.STRING)
     private Category category;
+
+    @Column(name="PRICE")
     private int price;
+
+    @Column(name="SAVED_MONEY_RATE")
     private int savedMoneyRate;
+
+    @Column(name="PRODUCT_DESCRIPTION")
     private String description;
-    private Date createdAt;
-    private String createdId;
 
-    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
-    private List<Option> options;
+    @Column(name="CREATED_DATE")
+    private LocalDateTime createdDate;
 
-    @OneToOne(mappedBy = "product", cascade=CascadeType.ALL)
-    private ProductFile productFile;
+    @Column(name="USER_ID")
+    private Long userId;
 
-    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
-    private List<ProductDetailFile> productDetailFiles;
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name = "PRODUCT_ID")
+    private List<OptionGroupSpecification> optionGroupSpecs = new ArrayList<>();
+
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name = "PRODUCT_ID")
+    private List<ProductImageGroup> productImageGroupSpecs = new ArrayList<>();
 
     @PrePersist
     public void beforeCreate(){
-        createdAt = new Date();
+        createdDate = LocalDateTime.now();
     }
 }

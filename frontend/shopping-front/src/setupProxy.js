@@ -6,7 +6,7 @@ module.exports = function(app) {
     proxyUrlPatterns.forEach(each => {
         app.use(
             proxy(each, {
-                target: 'http://localhost:5050',
+                target: 'http://localhost:6060',
                 secure: false,
                 ws: true,
                 logLevel: 'debug'

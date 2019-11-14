@@ -1,4 +1,4 @@
-INSERT INTO tb_color(code, name) VALUES('red', '레드');
+/*INSERT INTO tb_color(code, name) VALUES('red', '레드');
 INSERT INTO tb_color(code, name) VALUES('green', '그린');
 INSERT INTO tb_color(code, name) VALUES('blue', '블루');
 INSERT INTO tb_color(code, name) VALUES('black', '블랙');
@@ -35,11 +35,11 @@ insert into tb_phone_first_number_type(code, number_order) values('010', 1);
 insert into tb_phone_first_number_type(code, number_order) values('011', 2);
 insert into tb_phone_first_number_type(code, number_order) values('016', 3);
 insert into tb_phone_first_number_type(code, number_order) values('017', 4);
-insert into tb_phone_first_number_type(code, number_order) values('019', 5);
+insert into tb_phone_first_number_type(code, number_order) values('019', 5);*/
 
-INSERT INTO tb_role(id, name) VALUES(1, 'USER');
-INSERT INTO tb_role(id, name) VALUES(2, 'ADMIN');
-insert into tb_user(id, user_id, name, email, password, created_date, updated_date, role_id) values(1, 'holeman90', '조원진', 'holeman79@nate.com', '$2a$10$o.q9d5/Oq0b2oYCk09X56uux8RQ6pAEA5OzUpOyKO.WvOe8Ybvsa6', now(), now(), 2);
+--INSERT INTO tb_role(id, name) VALUES(1, 'USER');
+--INSERT INTO tb_role(id, name) VALUES(2, 'ADMIN');
+insert into users(id, user_id, name, email, password, created_date, updated_date, role_id) values(1, 'holeman90', '조원진', 'holeman79@nate.com', '$2a$10$o.q9d5/Oq0b2oYCk09X56uux8RQ6pAEA5OzUpOyKO.WvOe8Ybvsa6', now(), now(), 2);
 
 --insert into USER_ROLES(user_id, role_id) values(1, 1);
 --insert into USER_ROLES(user_id, role_id) values(1, 2);

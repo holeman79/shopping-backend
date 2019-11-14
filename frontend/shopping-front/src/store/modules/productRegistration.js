@@ -29,27 +29,27 @@ export const addProduct = createAction(ADD_PRODUCT, api.addProduct);
 // initial state
 const initialState = Map({
     productId: null,
-    product: Map({
-        title: '',
-        category: Map({
-            code: '',
-            name: ''
-        }),
-        price: '',
+    product: fromJS({
+        name: '',
+        category: '',
+        price: 0,
         savedMoneyRate: '',
-        options: fromJS([]),
         description: '',
-        createdId: '',
-
-        color: Map({
-            code: '',
-            name: ''
-        }),
-        size: Map({
-            code: '',
-            name: ''
-        }),
-        number: '',
+        userId: '',
+        optionGroupSpecs: fromJS([
+            {
+                name: '',
+                exclusive: false,
+                basic: false,
+                optionSpecs: fromJS([
+                    {
+                        name: '',
+                        price: 0,
+                        totalCount: 0
+                    }
+                ])
+            }
+        ])
     }),
     productFiles: Map({
         productImagePreview: '',

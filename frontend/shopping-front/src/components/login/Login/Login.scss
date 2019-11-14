@@ -75,15 +75,18 @@
 
   .google {
     @include social-button();
-    background-image: url("http://localhost:5050/G+.png");
+    //background-image: url("http://localhost:5050/G+.png");
+    background-image: url("http://www.faso.store/G+.png");
   }
   .facebook{
     @include social-button();
-    background-image: url("http://localhost:5050/fb.png");
+    //background-image: url("http://localhost:5050/fb.png");
+    background-image: url("http://www.faso.store/fb.png");
   }
   .kakao{
     @include social-button();
-    background-image: url("http://localhost:5050/kakao-login.png");
+    //background-image: url("http://localhost:5050/kakao-login.png");
+    background-image: url("http://www.faso.store/kakao-login.png");
   }
   .login-btn{
     display: block;

@@ -75,8 +75,8 @@ public class UploadFileUtils {
 
     public static String makeDirectoryByCategory(Product product) throws IOException {
         String productsPath = defaultPath + File.separator + imagesPath;
-        String categoryPath = productsPath + File.separator + product.getCategory().getCode();
-        String productTitlePath = categoryPath + File.separator + product.getId() + "." + product.getTitle();
+        String categoryPath = productsPath + File.separator + product.getCategory();
+        String productTitlePath = categoryPath + File.separator + product.getId() + "." + product.getName();
 
         // linux 이미지 저장방법1
         File targetFile = new File(productTitlePath);

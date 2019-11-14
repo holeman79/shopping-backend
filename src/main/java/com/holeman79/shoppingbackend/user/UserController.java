@@ -5,11 +5,10 @@ import com.holeman79.config.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.holeman79.exception.ErrorCode;
 import com.holeman79.exception.OAuth2AuthenticationException;
 import com.holeman79.exception.UserDuplException;
+import com.holeman79.exception.UserNotFoundException;
 import com.holeman79.shoppingbackend.payload.LoginRequest;
 import com.holeman79.shoppingbackend.payload.UserResponse;
 import com.holeman79.shoppingbackend.user.domain.User;
-import com.holeman79.shoppingbackend.user.domain.enums.RoleType;
-import com.holeman79.shoppingbackend.user.repository.RoleRepository;
 import com.holeman79.shoppingbackend.user.repository.UserRepository;
 import com.holeman79.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
@@ -42,23 +41,21 @@ public class UserController {
 
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
-
     @GetMapping("/oauth")
     public ResponseEntity<UserResponse> getUser(HttpServletRequest request, HttpServletResponse response){
         String accessToken = CookieUtils.getCookie(request, OAuth2AuthenticationSuccessHandler.ACCESS_TOKEN)
                 .map(Cookie::getValue).orElseThrow(() -> new OAuth2AuthenticationException(ErrorCode.ACCESS_TOKEN_NOT_EXIST));
 
         Long userId = tokenProvider.getUserIdFromJWT(accessToken);
-        Optional<User> user = userRepository.findById(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("userId : " + userId));
         CookieUtils.deleteCookie(request, response, OAuth2AuthenticationSuccessHandler.ACCESS_TOKEN);
 
         return new ResponseEntity<>(UserResponse.builder()
-                .id(user.get().getId())
-                .name(user.get().getName())
-                .imageUrl(user.get().getImageUrl())
+                .id(user.getId())
+                .name(user.getName())
+                .imageUrl(user.getImageUrl())
                 .accessToken(accessToken)
-                .role(user.get().getRole())
+                .roleType(user.getRoleType())
                 .build(), HttpStatus.OK);
     }
 
@@ -80,18 +77,18 @@ public class UserController {
                 .name(user.getName())
                 .imageUrl(user.getImageUrl())
                 .accessToken(accessToken)
-                .role(user.getRole())
+                .roleType(user.getRoleType())
                 .build(), HttpStatus.OK);
     }
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {
+    public ResponseEntity<?> addUser(@Valid @RequestBody User user) {
         if(userRepository.existsByUserId(user.getUserId()))
             throw new UserDuplException(user.getUserId());
 
         // Creating user's account
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedDate(LocalDateTime.now());
-        user.setRole(roleRepository.findByName(RoleType.USER).orElse(null));
+        user.setRoleType(User.RoleType.USER);
         User result = userRepository.save(user);
 
         return new ResponseEntity<>(HttpStatus.OK);

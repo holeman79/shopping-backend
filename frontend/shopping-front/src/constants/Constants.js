@@ -1,5 +1,5 @@
 // Product Registration Page
-export const BASE_URL = 'http://localhost:5050/';
+export const BASE_URL = 'http://localhost:6060/';
 export const OAUTH2_REDIRECT_URI = 'http://localhost:4000/oauth2/redirect';
 
 export const INPUT_TEXT_PLACEHOLDER_TITLE = '타이틀을 입력하세요';

@@ -1,8 +1,9 @@
 package com.holeman79.shoppingbackend.user.domain;
 
-import com.holeman79.shoppingbackend.user.domain.enums.SocialType;
+import com.holeman79.shoppingbackend.generic.code.SocialType;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,7 +14,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
@@ -21,36 +21,43 @@ import java.util.Map;
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_user")
+@Table(name = "USERS")
+@NoArgsConstructor
 public class User implements UserDetails, OAuth2User {
+    public enum RoleType { USER, SELLER, ADMIN };
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
     private Long id;
 
-    @Size(max = 20)
+    @Column(name = "USER_INPUT_ID")
     private String userId;
 
-    @Size(max = 20)
+    @Column(name = "PASSWORD")
+    private String password;
+
+    @Column(name = "USER_NAME")
     private String name;
 
     @NaturalId
-    @Size(max = 40)
     @Email
+    @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "IMAGE_URL")
     private String imageUrl;
 
-    @Size(max = 100)
-    private String password;
+    @Column(name = "SOCIAL_ID")
+    private String socialId;
 
+    @Column(name = "SOCIAL_TYPE")
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
-    private String socialId;
-
-    @ManyToOne
-    @JoinColumn(name="role_id")
-    private Role role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ROLE_TYPE")
+    private RoleType roleType;
 
     @Transient
     private Map<String, Object> attributes;
@@ -61,18 +68,9 @@ public class User implements UserDetails, OAuth2User {
     @LastModifiedDate
     private LocalDateTime updatedDate;
 
-    public User() {
-
-    }
-
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
 
     @Builder
-    public User(Long id, String userId, String name, String password, String email, String imageUrl, SocialType socialType, String socialId, Role role, Map<String, Object> attributes, LocalDateTime createdDate, LocalDateTime updatedDate){
+    public User(Long id, String userId, String name, String password, String email, String imageUrl, SocialType socialType, String socialId, RoleType roleType, Map<String, Object> attributes, LocalDateTime createdDate, LocalDateTime updatedDate){
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -81,7 +79,7 @@ public class User implements UserDetails, OAuth2User {
         this.imageUrl = imageUrl;
         this.socialType = socialType;
         this.socialId = socialId;
-        this.role = role;
+        this.roleType = roleType;
         this.attributes = attributes;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
