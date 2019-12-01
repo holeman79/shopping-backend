@@ -25,7 +25,7 @@ public class ControllerExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("handleMethodArgumentNotValidException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
     /**
      * @ModelAttribut 으로 binding error 발생시 BindException 발생한다.
@@ -35,7 +35,7 @@ public class ControllerExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleBindException(BindException e) {
         log.error("handleBindException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
     /**
      * enum type 일치하지 않아 binding 못할 경우 발생
@@ -45,7 +45,7 @@ public class ControllerExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         log.error("handleMethodArgumentTypeMismatchException", e);
         final ErrorResponse response = ErrorResponse.of(e);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
     /**
      * 지원하지 않은 HTTP method 호출 할 경우 발생
@@ -54,7 +54,7 @@ public class ControllerExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("handleHttpRequestMethodNotSupportedException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED);
-        return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity(response, HttpStatus.METHOD_NOT_ALLOWED);
     }
     /**
      * User가 존재하지 않을 경우 발생
@@ -63,7 +63,7 @@ public class ControllerExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException e) {
         log.error("handleUserNotFoundException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.USER_NOT_FOUND);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
     /**
      * OAuth2 인증 도중 오류가 발생할 경우 발생
@@ -73,7 +73,7 @@ public class ControllerExceptionHandler {
         log.error("handleOAuth2AuthenticationException", e);
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
+        return new ResponseEntity(response, HttpStatus.valueOf(errorCode.getStatus()));
     }
     /**
      * Authentication 객체가 필요한 권한을 보유하지 않은 경우 발생합
@@ -82,20 +82,20 @@ public class ControllerExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
         log.error("handleAccessDeniedException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.HANDLE_ACCESS_DENIED);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.HANDLE_ACCESS_DENIED.getStatus()));
+        return new ResponseEntity(response, HttpStatus.valueOf(ErrorCode.HANDLE_ACCESS_DENIED.getStatus()));
     }
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
         log.error("handleBusinessException", e);
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
+        return new ResponseEntity(response, HttpStatus.valueOf(errorCode.getStatus()));
     }
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("handleException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

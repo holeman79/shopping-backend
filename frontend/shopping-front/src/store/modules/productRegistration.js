@@ -7,6 +7,7 @@ import * as api from 'lib/api';
 // action types
 const INITIALIZE = 'productRegistration/INITIALIZE';
 const GET_OPTION_LIST = 'productRegistration/GET_OPTION_LIST';
+const ADD_OPTION_GROUP = 'productRegistration/ADD_OPTION_GROUP';
 const ADD_OPTION = 'productRegistration/ADD_OPTION';
 const DELETE_OPTION = 'productRegistration/DELETE_OPTION';
 const CHANGE_INPUT = 'productRegistration/CHANGE_INPUT';
@@ -18,6 +19,7 @@ const ADD_PRODUCT = 'productRegistration/ADD_PRODUCT';
 // action creators
 export const initialize = createAction(INITIALIZE);
 export const getOptionList = createAction(GET_OPTION_LIST, api.getProductOptionList);
+export const addOptionGroup = createAction(ADD_OPTION_GROUP);
 export const addOption = createAction(ADD_OPTION);
 export const deleteOption = createAction(DELETE_OPTION);
 export const changeInput = createAction(CHANGE_INPUT);
@@ -33,33 +35,55 @@ const initialState = Map({
         name: '',
         category: '',
         price: 0,
-        savedMoneyRate: '',
+        savedMoneyRate: 0,
         description: '',
         userId: '',
+        /*
         optionGroupSpecs: fromJS([
             {
                 name: '',
                 exclusive: false,
-                basic: false,
+                basic: true,
                 optionSpecs: fromJS([
                     {
-                        name: '',
+                        color: '',
+                        size: '',
                         price: 0,
                         totalCount: 0
-                    }
-                ])
+                    }])
             }
         ])
+        productImageGroups: fromJS([
+            {
+                name: '',
+                productImages: fromJS([
+                    {
+                        color: '',
+                        size: '',
+                        price: 0,
+                        totalCount: 0
+                    }])
+            }
+        ])
+        */
+        optionGroupSpecs: fromJS([]),
+        productImageGroups: fromJS([]),
+
+        color: '',
+        size: '',
+        totalCount: ''
     }),
-    productFiles: Map({
-        productImagePreview: '',
-        productImage: '',
-        productDetailImagesPreview: fromJS([]),
-        productDetailImages: fromJS([])
+    productImages: Map({
+        headerUrl: '',
+        header: '',
+        bodyUrl: fromJS([]),
+        body: fromJS([])
     }),
+
     categories: fromJS([]),
     colors: fromJS([]),
     sizes: fromJS([]),
+
     error: Map({
         status: '',
         message: '',
@@ -75,31 +99,40 @@ export default handleActions({
     },
     [CHANGE_SELECTBOX]: (state, action) => {
         const name = action.payload.name;
-        let value = action.payload.value;
-        value = eval("("+value+")");
-        return state.setIn(['product', name, 'code'], value.code)
-            .setIn(['product', name, 'name'], value.name);
+        const value = action.payload.value;
+        return state.set(name, value)
+            .setIn(['product', 'optionGroupSpecs', 'optionSpecs', name], value);
+    },
+    [ADD_OPTION_GROUP]: (state, action) => {
+        const { payload: optionGroupSpec } = action;
+        return state.setIn(['product', 'optionGroupSpecs'], state.get('product').get('optionGroupSpecs').push(fromJS(optionGroupSpec)))
+            .setIn(['product', 'color'], '')
+            .setIn(['product', 'size'], '')
+            .setIn(['product', 'totalCount'], '')
     },
     [ADD_OPTION]: (state, action) => {
-        const { payload: option } = action;
-        return state.setIn(['product', 'options'], state.get('product').get('options').push(Map(option)))
-            .setIn(['product', 'color'], Map({code: '', name: ''}))
-            .setIn(['product', 'size'], Map({code: '', name: ''}))
-            .setIn(['product', 'number'], '')
+        const { payload: optionGroupSpecs } = action;
+        return state.setIn(['product', 'optionGroupSpecs'], fromJS(optionGroupSpecs))
+            .setIn(['product', 'color'], '')
+            .setIn(['product', 'size'], '')
+            .setIn(['product', 'totalCount'], '')
     },
     [DELETE_OPTION]: (state, action) => {
-        const { payload: index } = action;
-        return state.setIn(['product', 'options'], state.get('product').get('options').delete(index))
+        const { payload: optionGroupSpecs } = action;
+        return state.setIn(['product', 'optionGroupSpecs'], fromJS(optionGroupSpecs))
+            .setIn(['product', 'color'], '')
+            .setIn(['product', 'size'], '')
+            .setIn(['product', 'totalCount'], '')
     },
     [ADD_SINGLE_IMAGE]: (state, action) => {
         const { name, fileUrl, file } = action.payload;
-        return state.setIn(['productFiles', name + 'Preview'], fileUrl)
-            .setIn(['productFiles', name], file)
+        return state.setIn(['productImages', name + 'Url'], fileUrl)
+            .setIn(['productImages', name], file)
     },
     [ADD_MULTI_IMAGE]: (state, action) => {
         const { name, fileUrl, file } = action.payload;
-        return state.setIn(['productFiles', name + 'Preview'], state.get('productFiles').get(name + 'Preview').push(fileUrl))
-            .setIn(['productFiles', name], state.get('productFiles').get(name).push(file))
+        return state.setIn(['productImages', name + 'Url'], state.get('productImages').get(name + 'Url').push(fileUrl))
+            .setIn(['productImages', name], state.get('productImages').get(name).push(file))
     },
     ...pender({
         type: ADD_PRODUCT,

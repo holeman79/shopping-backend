@@ -1,15 +1,19 @@
 package com.holeman79.shoppingbackend.file;
 
 import com.holeman79.shoppingbackend.product.domain.Product;
+import com.holeman79.shoppingbackend.product.domain.ProductImage;
+import com.holeman79.shoppingbackend.product.domain.ProductImageGroup;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,78 +28,44 @@ import java.util.UUID;
 @Component
 public class UploadFileUtils {
 
-    private static String imagesPath;
+    private static String applicationName;
     private static String defaultPath = System.getProperty("user.home");
 
     @Value("${imagesPath}")
-    private void setImagesPath(String imagesPath){
-        this.imagesPath = imagesPath;
+    private void setImagesPath(String applicationName){
+        this.applicationName = applicationName;
     }
 
-    public static String uploadFile(String originalName, byte[] fileData, String directory) throws Exception {
-
-        //겹쳐지지 않는 파일명을 위한 유니크한 값 생성
-        UUID uid = UUID.randomUUID();
-
-        //원본파일 이름과 UUID 결합
-        String savedName = uid.toString() + "_" + originalName;
-
-        if(directory == null)
-            //파일을 저장할 폴더 생성(년 월 일 기준)
-            directory = makeDirectoryByCalendar();
-
-        //저장할 파일준비
-        File target = new File(directory + File.separator, savedName);
-
-        //파일을 저장
-        FileCopyUtils.copy(fileData, target);
-
-        String formatName = originalName.substring(originalName.lastIndexOf(".")+1);
-
-        //파일의 확장자에 따라 썸네일(이미지일경우) 또는 아이콘을 생성함.
-//        if(MediaUtils.getMediaType(formatName) != null) {
-//            makeThumbnail(uploadPath, directory, savedName);
-//        }
-        return savedName;
+    public static void uploadProductImages(Product product) throws IOException {
+        for(ProductImageGroup productImageGroup : product.getProductImageGroups()){
+            String directory = new StringBuilder().append(defaultPath)
+                                                .append(File.separator)
+                                                .append(applicationName)
+                                                .append(File.separator)
+                                                .append(product.getCategory())
+                                                .append(File.separator)
+                                                .append(product.getId()).append('.').append(product.getName())
+                                                .append(File.separator)
+                                                .append(productImageGroup.getName())
+                                                .toString();
+            Path path = makeDirectory(directory);
+            for(ProductImage productImage : productImageGroup.getProductImages()){
+                uploadFile(path, productImage.getImage());
+            }
+        }
     }
 
-    private static String makeDirectoryByCalendar() throws IOException {
-        LocalDate localDate = LocalDate.now();
-        String datePath = defaultPath + File.separator + localDate.getYear() + new DecimalFormat("00").format(localDate.getMonthValue())
-                + new DecimalFormat("00").format(localDate.getDayOfMonth());
-
-        Set<PosixFilePermission> permis = PosixFilePermissions.fromString("rwxrwxr-x");
-        // 파일 속성
-        FileAttribute<Set<PosixFilePermission>> attrib= PosixFilePermissions.asFileAttribute(permis);
-        Path path = Paths.get(datePath);
-        Files.createDirectories(path, attrib);
-
-        return datePath;
+    private static Path makeDirectory(String directory) throws IOException {
+        Path path = Paths.get(directory);
+        Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rwxr-x---");
+        FileAttribute<Set<PosixFilePermission>> attribute = PosixFilePermissions.asFileAttribute(permissions);
+        return Files.createDirectories(path, attribute);
     }
 
-    public static String makeDirectoryByCategory(Product product) throws IOException {
-        String productsPath = defaultPath + File.separator + imagesPath;
-        String categoryPath = productsPath + File.separator + product.getCategory();
-        String productTitlePath = categoryPath + File.separator + product.getId() + "." + product.getName();
-
-        // linux 이미지 저장방법1
-        File targetFile = new File(productTitlePath);
-        targetFile.setReadable(true, true);
-        targetFile.setWritable(true, true);
-        targetFile.setExecutable(true, true);
-        boolean result = targetFile.mkdirs();
-
-        // linux 이미지 저장방법2
-//        // 디렉토리 권한 설정
-//        Set<PosixFilePermission> permis = PosixFilePermissions.fromString("rwxrwxr-x");
-////        // 파일 속성
-//        FileAttribute<Set<PosixFilePermission>> attrib= PosixFilePermissions.asFileAttribute(permis);
-//        Path path = Paths.get(productTitlePath);
-//        Files.createDirectories(path, attrib);
-
-        return productTitlePath + File.separator;
+    private static void uploadFile(Path path, MultipartFile file) throws IOException {
+        File target = new File(path.toString(), file.getOriginalFilename());
+        FileCopyUtils.copy(file.getBytes(), target);
     }
-
 
     //썸네일 이미지 생성
     public static String makeThumbnail(String directory, String fileName, int size) throws Exception {

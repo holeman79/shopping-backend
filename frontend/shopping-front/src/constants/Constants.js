@@ -18,6 +18,7 @@ export const TEXT_BASIC_INFO = '기본정보';
 export const TEXT_OPTION = '옵션선택'
 export const TEXT_COLOR = '색상';
 export const TEXT_SIZE = '사이즈';
+export const TEXT_COLOR_SIZE = '색상/사이즈';
 export const TEXT_CART = '장바구니';
 export const TEXT_PURCHASE = '구매하기';
 export const TEXT_NUMBER = '수량';

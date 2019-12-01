@@ -22,7 +22,7 @@ public class Product{
     @Column(name="PRODUCT_NAME")
     private String name;
 
-    @Column(name="CATEGORY_TYPE")
+    @Column(name="CATEGORY")
     @Enumerated(EnumType.STRING)
     private Category category;
 
@@ -38,19 +38,25 @@ public class Product{
     @Column(name="CREATED_DATE")
     private LocalDateTime createdDate;
 
-    @Column(name="USER_ID")
+    @Column(name="CREATOR_ID")
     private Long userId;
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name = "PRODUCT_ID")
-    private List<OptionGroupSpecification> optionGroupSpecs = new ArrayList<>();
+    private List<OptionGroupSpecification> optionGroupSpecs = new ArrayList();
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name = "PRODUCT_ID")
-    private List<ProductImageGroup> productImageGroupSpecs = new ArrayList<>();
+    private List<ProductImageGroup> productImageGroups = new ArrayList();
 
     @PrePersist
     public void beforeCreate(){
         createdDate = LocalDateTime.now();
+    }
+
+    public void uploadImages(){
+        for(ProductImageGroup productImageGroup : productImageGroups){
+            productImageGroup.uploadImages(category, id, name);
+        }
     }
 }

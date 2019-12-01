@@ -20,7 +20,6 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
-        #use_sql_comments: true
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
   jackson:
@@ -57,7 +56,7 @@ custom:
 
 app:
   jwtSecret: JWTSuperSecretKey
-  jwtExpirationInMs: 6000000 #100분
+  jwtExpirationInMs: 60000000 #1000분
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
@@ -70,4 +69,4 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
-imagesPath: fashion-society
+imagesPath: hang-sho

@@ -50,7 +50,7 @@ public class UserController {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("userId : " + userId));
         CookieUtils.deleteCookie(request, response, OAuth2AuthenticationSuccessHandler.ACCESS_TOKEN);
 
-        return new ResponseEntity<>(UserResponse.builder()
+        return new ResponseEntity(UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .imageUrl(user.getImageUrl())
@@ -72,7 +72,7 @@ public class UserController {
         User user = (User) authentication.getPrincipal();
         String accessToken = tokenProvider.generateToken(user.getId());
 
-        return new ResponseEntity<>(UserResponse.builder()
+        return new ResponseEntity(UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .imageUrl(user.getImageUrl())
@@ -91,6 +91,6 @@ public class UserController {
         user.setRoleType(User.RoleType.USER);
         User result = userRepository.save(user);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

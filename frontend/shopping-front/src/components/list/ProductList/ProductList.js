@@ -7,9 +7,8 @@ import * as constants from "constants/Constants";
 const cx = classNames.bind(styles);
 const numberFormat = new Intl.NumberFormat();
 
-const ProductItem = ({id, title, price, productFile}) => {
-    const { directory, savedFileName }  = productFile;
-    const imagePathUrl = constants.IMAGE_GET_API + "?fileName=" + encodeURI(directory + savedFileName);
+const ProductItem = ({id, title, price}) => {
+    const imagePathUrl = constants.IMAGE_GET_API + "?fileName=" + encodeURI("");
     return (
         <Link className={cx('product-item')} to={`/product/${id}`}>
             <img src={imagePathUrl}/>
@@ -25,12 +24,11 @@ const ProductList = ({products}) => {
     if(products.size > 0){
         productList = products.map(
             (product) => {
-                const {id, title, price, productFile} = product.toJS();
+                const {id, title, price} = product.toJS();
                 return (
                     <ProductItem
                         title={title}
                         price={price}
-                        productFile={productFile}
                         key={id}
                         id={id}
                     />

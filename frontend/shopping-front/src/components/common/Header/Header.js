@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 const Header = ({categories, logged, onLoginClick}) => {
     const role = sessionStorage.getItem('role');
     const categoryList = categories.map((category, index) => {
-        return(<Link className={cx('item')} key={index} value={JSON.stringify(category)} to={`/category/${category.get('code')}`}>{category.get('name')}</Link>)
+        return(<Link className={cx('item')} key={index} value={JSON.stringify(category)} to={`/category/${category.get('key')}`}>{category.get('value')}</Link>)
     });
 
     return(

@@ -1,12 +1,14 @@
 package com.holeman79.shoppingbackend.product.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "OPTION_GROUP_SPECS")
 public class OptionGroupSpecification {
@@ -26,6 +28,8 @@ public class OptionGroupSpecification {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "OPTION_GROUP_SPEC_ID")
-    private List<OptionSpecification> optionSpecs = new ArrayList<>();
+    private List<OptionSpecification> optionSpecs = new ArrayList();
+
+
 
 }

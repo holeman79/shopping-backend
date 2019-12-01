@@ -29,7 +29,7 @@ public class ErrorResponse {
         this.message = code.getMessage();
         this.status = code.getStatus();
         this.code = code.getCode();
-        this.errors = new ArrayList<>();
+        this.errors = new ArrayList();
     }
 
     public void setMessage(String message){
@@ -70,7 +70,7 @@ public class ErrorResponse {
         }
 
         public static List<FieldError> of(final String field, final String value, final String reason) {
-            List<FieldError> fieldErrors = new ArrayList<>();
+            List<FieldError> fieldErrors = new ArrayList();
             fieldErrors.add(new FieldError(field, value, reason));
             return fieldErrors;
         }

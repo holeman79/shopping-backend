@@ -48,7 +48,6 @@ export default handleActions({
         type: LOGIN,
         onSuccess: (state, action) => {
             const { id, name, imageUrl, roleType, accessToken, tokenType } = action.payload.data;
-            debugger;
             sessionStorage.setItem("id", id);
             sessionStorage.setItem("name", name);
             sessionStorage.setItem("imageUrl", imageUrl);

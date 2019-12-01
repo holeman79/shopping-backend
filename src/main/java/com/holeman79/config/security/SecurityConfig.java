@@ -102,23 +102,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/", "/login/**", "/oauth2/**", "/images/**", "/favicon.ico",
+                    .antMatchers("/oauth2/**", "/images/**", "/favicon.ico",
                         "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.ttf",
                         "/swagger*/**", "/**/api-docs", "/**/ui", "/configuration/**",
                         "/**/*.html*", "/**/*.css", "/**/*.js", "/**/*.json")
                         .permitAll()
-                    .antMatchers("/category/**", "/product/**", "/login", "/signup", "/order/**", "/oauth2/redirect")
+                    .antMatchers("/", "/category/**", "/product/**", "/login", "/signup", "/order/**", "/oauth2/redirect") // 화면조회 url
                         .permitAll()
                     .antMatchers("/api/user/**")
                         .permitAll()
-
-                    .antMatchers(HttpMethod.GET,"/api/product/option")
-                        .authenticated()
-                    .antMatchers(HttpMethod.GET,"/api/product/**")
+                    .antMatchers(HttpMethod.GET,"/api/products/**")
                         .permitAll()
                     .antMatchers(HttpMethod.GET,"/api/file/**")
-                        .permitAll()
-                    .antMatchers("/api/common/**")
                         .permitAll()
                     .antMatchers("/h2-console/**")
                         .permitAll()

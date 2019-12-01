@@ -5,10 +5,10 @@ import FileUploadButton from "components/common/FileUploadButton";
 import * as constants from "constants/Constants";
 const cx = classNames.bind(styles);
 
-const ProductRegistrationBody = ({productFiles, onImageUpload, onChangeProductInput, onAddProduct}) => {
-    const productDetailImagesPreview = productFiles.get('productDetailImagesPreview').map(
-        (productDetailImagePreview, index) => (
-            <img src={productDetailImagePreview} />
+const ProductRegistrationBody = ({productImages, onImageUpload, onChangeProductInput, onAddProduct}) => {
+    const bodyUrl = productImages.get('bodyUrl').map(
+        (bodyUrl, index) => (
+            <img src={bodyUrl} />
         )
     );
 
@@ -18,10 +18,10 @@ const ProductRegistrationBody = ({productFiles, onImageUpload, onChangeProductIn
                 <h3 >{constants.TEXT_DESCRIPTION_DETAIL_IMAGE}</h3>
 
                 { /* 조건에 따른 렌더링 */
-                    productDetailImagesPreview && productDetailImagesPreview
+                    bodyUrl && bodyUrl
                 }
                 <div className={cx('fileUpload-button')}>
-                <FileUploadButton name="productDetailImages" type="multi" text={constants.TEXT_IMAGE_UPLOAD} onChange={onImageUpload}/>
+                <FileUploadButton name="body" type="multi" text={constants.TEXT_IMAGE_UPLOAD} onChange={onImageUpload}/>
                 </div>
             </div>
             <div className={cx('content-inner')}>
