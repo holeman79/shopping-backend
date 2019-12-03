@@ -195,7 +195,12 @@ class ProductRegistrationContainer extends Component {
             formData.append('productImageGroups[1].productImages[' + j + '].image', bodyImages.get(j));
         }
 
-        ProductRegistrationActions.addProduct(formData);
+        try{
+            await ProductRegistrationActions.addProduct(formData);
+            history.push(`/product/${this.props.productId}`);
+        }catch(e){
+            console.log(e);
+        }
     };
 
     initialize = async () => {

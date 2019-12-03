@@ -10,27 +10,32 @@ class ProductViewInfo extends Component {
 
     render() {
         const { product, selectedColor, orderOptions, colorSizeList, onChangeProductInput, onDeleteOption, onChangeOrderProductNumber, onPurchase } = this.props;
-        const { id, title, price, savedMoneyRate, options, productFile } = product.toJS();
+        const { id, name, price, savedMoneyRate } = product.toJS();
         let imagePathUrl = "";
-        if(productFile != ""){
-            const { directory, savedFileName } = productFile;
-            imagePathUrl = constants.IMAGE_GET_API + "?fileName=" + encodeURI(directory + savedFileName);
+        let productImageGroups = product.get('productImageGroups');
+        if(productImageGroups != "" && productImageGroups.size > 0){
+            let productImage;
+            for(let imageGroup of productImageGroups){
+                if(imageGroup.get('name') === 'header') productImage = imageGroup.get('productImages').get(0);
+            }
+            const savedUri = productImage.get('savedUri');
+            imagePathUrl = constants.IMAGE_GET_API + "?fileName=" + encodeURI(savedUri);
         }
         const colorList = colorSizeList.map(
             (option, index) => {
-                const colorValue = {code: option.get('color').get('code'), name: option.get('color').get('name')};
-                return(<option key={index} value={JSON.stringify(colorValue)}>{option.get('color').get('name')}</option>);
+                const colorValue = {key: option.get('color').get('key'), value: option.get('color').get('value')};
+                return(<option key={index} value={JSON.stringify(colorValue)}>{option.get('color').get('value')}</option>);
             }
         );
         let sizeList = "";
-        if(selectedColor.get('code') != ""){
+        if(selectedColor.get('key') != ""){
             for(let i = 0; i < colorSizeList.size; i++){
-                const colorCode = colorSizeList.get(i).get('color').get('code');
-                if(colorCode === selectedColor.get('code')){
+                const colorCode = colorSizeList.get(i).get('color').get('key');
+                if(colorCode === selectedColor.get('key')){
                     sizeList = colorSizeList.get(i).get('size').map(
                         (size, index) => {
-                            const sizeValue = {code: size.get('code'), name: size.get('name')};
-                            return(<option key={index} value={JSON.stringify(sizeValue)}>{size.get('name')}</option>)
+                            const sizeValue = {key: size.get('key'), value: size.get('value')};
+                            return(<option key={index} value={JSON.stringify(sizeValue)}>{size.get('value')}</option>)
                         }
                     )
                 }
@@ -40,7 +45,7 @@ class ProductViewInfo extends Component {
             (orderOption, index) => (
                 <div key={index} className={cx('order-option', 'text')}>
                     <div className={cx('item')}>옵션: {orderOption.get('color').get('name')} / {orderOption.get('size').get('name')}</div>
-                    <div className={cx('item')}>수량: <input name='number' value={orderOption.get('number')} defaultValue={1} className={cx('input-text')} onChange={(e) => onChangeOrderProductNumber({e, index})}/>개</div>
+                    <div className={cx('item')}>수량: <input name='count' value={orderOption.get('count')} defaultValue={1} className={cx('input-text')} onChange={(e) => onChangeOrderProductNumber({e, index})}/>개</div>
                     <div className={cx('item')}><button onClick={() => onDeleteOption(index)}><img src="http://www.faso.store/xButton.png"/></button></div>
                 </div>
             )
@@ -49,7 +54,7 @@ class ProductViewInfo extends Component {
             <div className={cx('product-info')}>
                 <img src={imagePathUrl} className={cx('product-image')}/>
                 <div className={cx('info')}>
-                    <div className={cx('product-title')}>{title}</div>
+                    <div className={cx('product-title')}>{name}</div>
                     <div className={cx('info-sub')}>
                         <div className={cx('title1')}>
                             {constants.TEXT_PRICE}
@@ -73,7 +78,7 @@ class ProductViewInfo extends Component {
                             {constants.TEXT_COLOR}
                         </div>
                         <select name="selectedColor" className={cx('select-box')} onChange={onChangeProductInput}>
-                            <option value="" selected={selectedColor.get('code')===''}>{constants.SELECTBOX_DEFAULT}</option>
+                            <option value="" selected={selectedColor.get('key') === ''}>{constants.SELECTBOX_DEFAULT}</option>
                             { colorList }
                         </select>
                     </div>
@@ -83,7 +88,7 @@ class ProductViewInfo extends Component {
                         </div>
                         <select name="selectedSize" className={cx('select-box')} onChange={onChangeProductInput}>
                             <option value="" defaultValue>{constants.SELECTBOX_DEFAULT}</option>
-                            { selectedColor.get('code') && sizeList }
+                            { selectedColor.get('key') && sizeList }
                         </select>
                     </div>
                     <div className={cx('order-options')}>

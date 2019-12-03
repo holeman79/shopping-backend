@@ -25,27 +25,59 @@ export const changeOrderProductNumber = createAction(CHANGE_ORDER_PRODUCT_NUMBER
 
 // initial state
 const initialState = Map({
-    product: Map({
-        id: '',
-        title: '',
-        categoryCode: '',
-        price: '',
-        savedMoneyRate: '',
+    product: fromJS({
+        id: null,
+        name: '',
+        category: '',
+        price: 0,
+        savedMoneyRate: 0,
         description: '',
-        options: fromJS([]),
-        productFile: '',
-        productDetailFiles: fromJS([]),
+        userId: '',
+        createdDate: null,
+
+        // optionGroupSpecs: fromJS([
+        //     {
+        //         name: '',
+        //         exclusive: false,
+        //         basic: true,
+        //         optionSpecs: fromJS([
+        //             {
+        //                 color: '',
+        //                 colorValue: '',
+        //                 size: '',
+        //                 sizeValue: '',
+        //                 price: 0,
+        //                 totalCount: 0
+        //             }])
+        //     }
+        // ]),
+        // productImageGroups: fromJS([
+        //     {
+        //         name: '',
+        //         productImages: fromJS([
+        //             {
+        //                 id: null,
+        //                 name: '',
+        //                 size: '',
+        //                 savedURI: ''
+        //
+        //             }])
+        //     }
+        // ])
+
+        optionGroupSpecs: fromJS([]),
+        productImageGroups: fromJS([]),
 
     }),
     selectedColor: Map({
-        code: '',
-        name: ''
+        key: '',
+        value: ''
     }),
     selectedSize: Map({
-        code: '',
-        name: ''
+        key: '',
+        value: ''
     }),
-    number: '',
+    count: '',
 
     order: Map({
         options: fromJS([]),
@@ -72,18 +104,18 @@ export default handleActions({
     [CHANGE_SELECTBOX]: (state, action) => {
         const name = action.payload.name;
         let value = action.payload.value;
-        if(value === "") return state.setIn([name, 'code'], '')
-            .setIn([name, 'name'], '');
+        if(value === "") return state.setIn([name, 'key'], '')
+            .setIn([name, 'value'], '');
         value = eval("("+value+")");
-        return state.setIn([name, 'code'], value.code)
-            .setIn([name, 'name'], value.name);
+        return state.setIn([name, 'key'], value.key)
+            .setIn([name, 'value'], value.value);
     },
     [ADD_ORDER_OPTION]: (state, action) => {
         const { selectedColor, selectedSize } = action.payload;
         const option = Map({color: selectedColor, size: selectedSize, number: 1});
         return state.setIn(['order', 'options'], state.get('order').get('options').push(option))
-            .set('selectedColor', Map({code: '', name: ''}))
-            .set('selectedSize', Map({code: '', name: ''}))
+            .set('selectedColor', Map({key: '', value: ''}))
+            .set('selectedSize', Map({key: '', value: ''}))
     },
     [DELETE_ORDER_OPTION]: (state, action) => {
         const { payload: index } = action;

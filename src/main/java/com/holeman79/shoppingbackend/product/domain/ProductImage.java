@@ -1,6 +1,7 @@
 package com.holeman79.shoppingbackend.product.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.holeman79.shoppingbackend.file.UploadFileUtils;
 import com.holeman79.shoppingbackend.generic.code.Category;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,8 +31,11 @@ public class ProductImage {
     @Transient
     private MultipartFile image;
 
-    public void uploadImage(Category category, Long productId, String productName, String groupName){
+    @Transient
+    private String savedUri;
 
-
+    public void setSavedURI(Category category, Long productId, String productName, String groupName){
+        String savedUri = UploadFileUtils.makeStringPath(category.getKey(), productId + "." + productName, groupName, name);
+        this.savedUri = savedUri;
     }
 }

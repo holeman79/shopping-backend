@@ -30,6 +30,9 @@ public class OptionGroupSpecification {
     @JoinColumn(name = "OPTION_GROUP_SPEC_ID")
     private List<OptionSpecification> optionSpecs = new ArrayList();
 
-
+    public void setValue(){
+        for(OptionSpecification optionSpecification : optionSpecs)
+            optionSpecification.setValue();
+    }
 
 }

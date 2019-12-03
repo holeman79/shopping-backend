@@ -21,23 +21,23 @@ class ProductViewContainer extends Component {
         colorSizeList: fromJS([])
     };
     componentDidUpdate(prevProps, prevState){
-        const { productOptions, selectedColor, selectedSize } = this.props;
-        if(prevProps.productOptions !== this.props.productOptions) {
-
+        const { productOptionGroupSpecs, selectedColor, selectedSize } = this.props;
+        if(prevProps.productOptionGroupSpecs !== this.props.productOptionGroupSpecs) {
+            let productOptionSpecs = productOptionGroupSpecs.get(0).get('optionSpecs');
             let colorSizeList = fromJS([]);
-            for(let i = 0; i < productOptions.size; i++){
-                let option = productOptions.get(i);
+            for(let i = 0; i < productOptionSpecs.size; i++){
+                let productOptionSpec = productOptionSpecs.get(i);
                 let exist = false;
 
                 for(let j = 0; j < colorSizeList.size; j++){
                     let item = colorSizeList.get(j);
-                    if(option.get('color').get('code') === item.get('color').get('code')) {
+                    if(productOptionSpec.get('color') === item.get('color').get('key')) {
                         //colorSizeList = colorSizeList.update(j, item => item.set('size', item.get('size').push(option.get('size'))));
                         colorSizeList = colorSizeList.update(j, item => item.set('size',
                             item.get('size').push(
                                 Map({
-                                    code: option.get('size').get('code'),
-                                    name: option.get('size').get('name')
+                                    key: productOptionSpec.get('size'),
+                                    value: productOptionSpec.get('sizeValue')
                                 })
                             )));
                         exist = true;
@@ -50,14 +50,15 @@ class ProductViewContainer extends Component {
                             {
                                 color: Map(
                                     {
-                                        code: option.get('color').get('code'),
-                                        name: option.get('color').get('name'),
+                                        key: productOptionSpec.get('color'),
+                                        value: productOptionSpec.get('colorValue'),
                                     }),
+
                                 size: List([
                                     Map({
-                                            code: option.get('size').get('code'),
-                                            name: option.get('size').get('name'),
-                                        })
+                                        key: productOptionSpec.get('size'),
+                                        value: productOptionSpec.get('sizeValue'),
+                                    })
                                 ])
                             }));
                 }
@@ -107,10 +108,10 @@ class ProductViewContainer extends Component {
         for(let i = 0 ; i < orderOptions.size; i++){
             const color = orderOptions.get(i).get('color');
             const size = orderOptions.get(i).get('size');
-            if(color.get('code') === selectedColor.get('code') && size.get('code') === selectedSize.get('code')){
+            if(color.get('key') === selectedColor.get('key') && size.get('key') === selectedSize.get('key')){
                 const msg = constants.WARNING_ADD_ORDER_OPTION;
                 this.toast(msg, 'custom', 2000, toastColor);
-                ProductViewActions.changeInput({name: 'selectedSize', value: Map({code: '', name: ''})});
+                ProductViewActions.changeInput({name: 'selectedSize', value: Map({key: '', value: ''})});
                 return;
             }
         }
@@ -149,7 +150,7 @@ class ProductViewContainer extends Component {
 export default connect(
     (state) => ({
         product: state.productView.get('product'),
-        productOptions: state.productView.get('product').get('options'),
+        productOptionGroupSpecs: state.productView.get('product').get('optionGroupSpecs'),
         selectedColor: state.productView.get('selectedColor'),
         selectedSize: state.productView.get('selectedSize'),
         orderOptions: state.productView.get('order').get('options'),

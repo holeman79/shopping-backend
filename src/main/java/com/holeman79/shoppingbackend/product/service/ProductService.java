@@ -28,9 +28,8 @@ public class ProductService {
 
     public Product getProduct(Long id){
         Product product = productRepository.getOne(id);
-
-
-
+        product.setSavedUri();
+        product.setValue();
         return product;
     }
 

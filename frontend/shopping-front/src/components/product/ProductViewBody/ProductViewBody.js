@@ -5,16 +5,27 @@ import * as constants from "constants/Constants";
 
 const cx = classNames.bind(styles);
 const ProductViewBody = ({product}) => {
-    const { productDetailFiles, description }  = product.toJS();
-    const productDetailImageList = productDetailFiles.map(
-        (productDetailFile, index) => {
-            const { directory, savedFileName } = productDetailFile;
-            const imagePathUrl = constants.IMAGE_GET_API + "?fileName=" + encodeURI(directory + savedFileName);
-            return(
-                <img key={index} src={imagePathUrl}/>
-            )
+    const description = product.get('description');
+    const productImageGroups = product.get('productImageGroups');
+    let productImageList;
+
+    if(productImageGroups.size > 0){
+        for(let imageGroup of productImageGroups){
+            if(imageGroup.get('name') === 'body'){
+                const productImages = imageGroup.get('productImages');
+                productImageList = productImages.map(
+                    (productImage, index) => {
+                        const savedUri = productImage.get('savedUri');
+                        const imagePathUri = constants.IMAGE_GET_API + "?fileName=" + encodeURI(savedUri);
+                        return(
+                            <img key={index} src={imagePathUri}/>
+                        )
+                    }
+                );
+            }
         }
-    )
+    }
+
     return(
         <div className={cx('product-body')}>
 
@@ -24,8 +35,9 @@ const ProductViewBody = ({product}) => {
                     {constants.TEXT_BODY_DESCRIPTION}
                 </div>
             </div>
-            {productDetailImageList}
+            {productImageList}
             <div className={cx('content')}>
+
                 {description}
             </div>
         </div>

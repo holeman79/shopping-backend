@@ -25,9 +25,9 @@ public class ProductImageGroup {
     @JoinColumn(name = "PRODUCT_IMAGE_GROUP_ID")
     private List<ProductImage> productImages = new ArrayList();
 
-    public void uploadImages(Category category, Long productId, String productName){
+    public void setSavedUri(Category category, Long productId, String productName){
         for(ProductImage productImage : productImages){
-
+            productImage.setSavedURI(category, productId, productName, name);
         }
     }
 }

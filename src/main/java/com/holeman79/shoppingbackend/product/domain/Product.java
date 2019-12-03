@@ -54,9 +54,13 @@ public class Product{
         createdDate = LocalDateTime.now();
     }
 
-    public void uploadImages(){
-        for(ProductImageGroup productImageGroup : productImageGroups){
-            productImageGroup.uploadImages(category, id, name);
-        }
+    public void setSavedUri(){
+        for(ProductImageGroup productImageGroup : productImageGroups)
+            productImageGroup.setSavedUri(category, id, name);
+    }
+
+    public void setValue(){
+        for(OptionGroupSpecification optionGroupSpecification : optionGroupSpecs)
+            optionGroupSpecification.setValue();
     }
 }

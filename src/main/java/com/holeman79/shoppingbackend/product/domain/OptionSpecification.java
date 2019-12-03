@@ -21,13 +21,24 @@ public class OptionSpecification {
     @Column(name = "COLOR")
     private Color color;
 
+    @Transient
+    private String colorValue;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "SIZE")
     private Size size;
+
+    @Transient
+    private String sizeValue;
 
     @Column(name = "PRICE")
     private int price;
 
     @Column(name = "TOTAL_COUNT")
     private int totalCount;
+
+    public void setValue(){
+        this.colorValue = color.getValue();
+        this.sizeValue = size.getValue();
+    }
 }

@@ -26,8 +26,8 @@ export const login = ({userId, password}) => axios.post('/api/user/login', {user
 export const signup = ({userId, password, name}) => axios.post('/api/user/signup', {userId, password, name});
 export const getOauth2User = () => axios.get(`/api/user/oauth`);
 
-export const getOrderOptionList = () => axios.get('/api/order/option', request());
-export const addOrder = (order) => axios.post('/api/order', order, request());
+export const getOrderOptionList = () => axios.get('/api/orders/option', request());
+export const addOrder = (order) => axios.post('/api/orders', order, request());
 
 
 

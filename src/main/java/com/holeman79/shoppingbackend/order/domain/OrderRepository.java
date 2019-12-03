@@ -1,4 +1,4 @@
-package com.holeman79.shoppingbackend.order.repository;
+package com.holeman79.shoppingbackend.order.domain;
 
 import com.holeman79.shoppingbackend.order.domain.Order;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -45,8 +46,8 @@ public class Order {
     @Column(name = "BANKBOOK_TYPE")
     private BankBook selectedBankBook;
 
-//    @OneToMany(cascade=CascadeType.ALL)
-//    @JoinColumn(name = "ORDER_ID")
-//    private List<OrderItem> orderItems;
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name = "ORDER_ID")
+    private List<OrderItem> orderItems;
 
 }

@@ -1,4 +1,4 @@
-package com.holeman79.shoppingbackend.order;
+package com.holeman79.shoppingbackend.order.service;
 
 import com.holeman79.shoppingbackend.order.domain.Order;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 @RequiredArgsConstructor
 public class OrderController {
 

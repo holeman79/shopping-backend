@@ -38,21 +38,35 @@ public class UploadFileUtils {
 
     public static void uploadProductImages(Product product) throws IOException {
         for(ProductImageGroup productImageGroup : product.getProductImageGroups()){
-            String directory = new StringBuilder().append(defaultPath)
-                                                .append(File.separator)
-                                                .append(applicationName)
-                                                .append(File.separator)
-                                                .append(product.getCategory())
-                                                .append(File.separator)
-                                                .append(product.getId()).append('.').append(product.getName())
-                                                .append(File.separator)
-                                                .append(productImageGroup.getName())
-                                                .toString();
+            String directory = makeStringPath(
+                    product.getCategory().getKey(),
+                    product.getId() + "." + product.getName(),
+                    productImageGroup.getName());
+//            String directory2 = new StringBuilder().append(defaultPath)
+//                                                .append(File.separator)
+//                                                .append(applicationName)
+//                                                .append(File.separator)
+//                                                .append(product.getCategory())
+//                                                .append(File.separator)
+//                                                .append(product.getId()).append('.').append(product.getName())
+//                                                .append(File.separator)
+//                                                .append(productImageGroup.getName())
+//                                                .toString();
             Path path = makeDirectory(directory);
             for(ProductImage productImage : productImageGroup.getProductImages()){
                 uploadFile(path, productImage.getImage());
             }
         }
+    }
+
+    public static String makeStringPath(String ...paths){
+        StringBuilder pathBuilder = new StringBuilder();
+        pathBuilder.append(defaultPath).append(File.separator).append(applicationName).append(File.separator);
+        for(int i = 0; i < paths.length; i++){
+            pathBuilder.append(paths[i]);
+            if(i != paths.length-1) pathBuilder.append(File.separator);
+        }
+        return pathBuilder.toString();
     }
 
     private static Path makeDirectory(String directory) throws IOException {

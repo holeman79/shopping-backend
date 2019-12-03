@@ -1,9 +1,7 @@
-package com.holeman79.shoppingbackend.order;
+package com.holeman79.shoppingbackend.order.service;
 
 import com.holeman79.shoppingbackend.order.domain.Order;
-import com.holeman79.shoppingbackend.order.domain.OrderItem;
-import com.holeman79.shoppingbackend.order.repository.OrderRepository;
-import com.holeman79.util.OrderNoGenerator;
+import com.holeman79.shoppingbackend.order.domain.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
