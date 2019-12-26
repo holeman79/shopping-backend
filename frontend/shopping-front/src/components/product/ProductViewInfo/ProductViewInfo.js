@@ -44,7 +44,7 @@ class ProductViewInfo extends Component {
         const orderOptionList = orderOptions.map(
             (orderOption, index) => (
                 <div key={index} className={cx('order-option', 'text')}>
-                    <div className={cx('item')}>옵션: {orderOption.get('color').get('name')} / {orderOption.get('size').get('name')}</div>
+                    <div className={cx('item')}>옵션: {orderOption.get('color').get('value')} / {orderOption.get('size').get('value')}</div>
                     <div className={cx('item')}>수량: <input name='count' value={orderOption.get('count')} defaultValue={1} className={cx('input-text')} onChange={(e) => onChangeOrderProductNumber({e, index})}/>개</div>
                     <div className={cx('item')}><button onClick={() => onDeleteOption(index)}><img src="http://www.faso.store/xButton.png"/></button></div>
                 </div>

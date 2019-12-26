@@ -14,7 +14,7 @@ const CHANGE_OBJECT = 'order/CHANGE_OBJECT';
 
 // action creators
 export const initializeOrder = createAction(INITIALIZE_ORDER);
-export const getOptionList = createAction(GET_OPTION_LIST, api.getOrderOptionList);
+export const getOptionList = createAction(GET_OPTION_LIST, api.getOrderOptions);
 export const showModal = createAction(SHOW_MODAL);
 export const hideModal = createAction(HIDE_MODAL);
 export const addOrder = createAction(ADD_ORDER, api.addOrder);
@@ -23,10 +23,8 @@ export const changeObject = createAction(CHANGE_OBJECT);
 
 // initial state
 const initialState = Map({
-    modalPostCode: false,
-
     orderItems: fromJS([]),
-
+    modalPostCode: false,
     ordererName: '',
     zipcode: '',
     address: '',
@@ -35,22 +33,16 @@ const initialState = Map({
     mobileNo1: '',
     mobileNo2: '',
     mobileNo3: '',
-
-    selectedPayment: Map({}),
     depositorName: '',
-    selectedBankBook: Map({}),
-
     totalPrice: '',
-
     userId: '',
 
-    paymentWays: fromJS([]),
+    selectedBankBook: Map({}),
+    selectedPayment: Map({}),
+    paymentTypes: fromJS([]),
     bankBooks: fromJS([]),
-    phoneFirstNumberTypes: fromJS([]),
-    error: Map({
-        status: '',
-        message: '',
-    }),
+    phoneFirstNumbers: fromJS([]),
+
 });
 
 // reducer
@@ -79,13 +71,13 @@ export default handleActions({
     ...pender({
         type: GET_OPTION_LIST,
         onSuccess: (state, action) => {
-            const { paymentWays, bankBooks, phoneFirstNumberTypes } = action.payload.data;
-            return state.set('paymentWays', fromJS(paymentWays))
+            const { paymentTypes, bankBooks, phoneFirstNumbers } = action.payload.data;
+            return state.set('paymentTypes', fromJS(paymentTypes))
                 .set('bankBooks', fromJS(bankBooks))
-                .set('phoneFirstNumberTypes', fromJS(phoneFirstNumberTypes))
-                .set('selectedPayment', Map(paymentWays[0]))
+                .set('phoneFirstNumbers', fromJS(phoneFirstNumbers))
+                .set('selectedPayment', Map(paymentTypes[0]))
                 .set('selectedBankBook', Map(bankBooks[0]))
-                .set('mobileNo1', phoneFirstNumberTypes[0].code)
+                .set('mobileNo1', phoneFirstNumbers[0].value)
         },
         onError: (state, action) => {
             const { status, message } = action.payload.response.data;

@@ -23,8 +23,11 @@ public class OrderItem {
     @Column(name = "PRODUCT_NAME")
     private String name;
 
-    @Column(name = "PRODUCT_COUNT")
+    @Column(name = "COUNT")
     private int count;
+
+    @Column(name = "PRODUCT_PRICE")
+    private int price;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "ORDER_ITEM_ID")

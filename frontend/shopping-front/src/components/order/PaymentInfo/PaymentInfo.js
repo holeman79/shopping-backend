@@ -8,19 +8,18 @@ import * as constants from "constants/Constants";
 const cx = classNames.bind(styles);
 const numberFormat = new Intl.NumberFormat();
 
-const PaymentInfo = ({paymentWays, bankBooks, totalPrice, depositorName, selectedBankBook, selectedPayment, onChangeObject, onChangeInput, onPayment }) => {
-    const paymentWayList = paymentWays.map(
-        (paymentWay) => (
+const PaymentInfo = ({paymentTypes, bankBooks, totalPrice, depositorName, selectedBankBook, selectedPayment, onChangeObject, onChangeInput, onPayment }) => {
+    const paymentTypeList = paymentTypes.map(
+        (paymentType) => (
             <label className={cx('radio-box')}>
-                <input name="selectedPayment" type="radio" checked={selectedPayment.get('code') === paymentWay.get('code')} name="selectedPayment" value={JSON.stringify(paymentWay)} onChange={onChangeObject}/>
-                {paymentWay.get('name')}
+                <input name="selectedPayment" type="radio" checked={selectedPayment.get('key') === paymentType.get('key')} name="selectedPayment" value={JSON.stringify(paymentType)} onChange={onChangeObject}/>
+                {paymentType.get('value')}
             </label>
         )
     );
     const bankBookList = bankBooks.map(
         (bankBook, index) => {
-            const showValue = bankBook.get('bankName') + ":" + bankBook.get('bankAccount') + " " + bankBook.get('accountHolder');
-            return (<option key={index} value={JSON.stringify(bankBook)} selected={bankBook.get('code') === selectedBankBook}>{showValue}</option>)
+            return (<option key={index} value={JSON.stringify(bankBook)} selected={bankBook.get('key') === selectedBankBook.get('key')}>{bankBook.get('value')}</option>)
         }
     );
 
@@ -31,10 +30,10 @@ const PaymentInfo = ({paymentWays, bankBooks, totalPrice, depositorName, selecte
             <div className={cx('payment-content')}>
                 <div className={cx('payment-way')}>
                     <div className={cx('radio-group')}>
-                        {paymentWayList}
+                        {paymentTypeList}
                     </div>
                     {
-                        (selectedPayment.get('code') === 'no_bankbook') &&
+                        (selectedPayment.get('key') === 'REMITTANCE') &&
                         <div className={cx('no-bankbook')}>
                             <div className={cx('no-bankbook-sub')}>
                                 <div className={cx('term')}>입금자명</div>
@@ -49,7 +48,7 @@ const PaymentInfo = ({paymentWays, bankBooks, totalPrice, depositorName, selecte
                         </div>
                     }
                     {
-                        (selectedPayment.get('code') !== 'no_bankbook') && <div className={cx('message')}>추후 구현 예정입니다.</div>
+                        (selectedPayment.get('key') !== 'REMITTANCE') && <div className={cx('message')}>추후 구현 예정입니다.</div>
                     }
                 </div>
                 <div className={cx('payment-info')}>

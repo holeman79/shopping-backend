@@ -1,6 +1,7 @@
 package com.holeman79.shoppingbackend.product.service;
 
 import com.holeman79.shoppingbackend.file.UploadFileUtils;
+import com.holeman79.shoppingbackend.generic.code.Category;
 import com.holeman79.shoppingbackend.product.domain.Product;
 import com.holeman79.shoppingbackend.product.domain.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,23 +35,18 @@ public class ProductService {
         return product;
     }
 
-    public Page<Product> getProductList(Pageable pageable, String categoryCode){
+    public Page<Product> getProductList(Pageable pageable, String category){
         pageable = getPageable(pageable);
-        if(categoryCode == null) return productRepository.findAll(pageable);
-        return null;
-        //return productRepository.findByCategoryCode(pageable, categoryCode);
+        Page<Product> products;
+        if(category == null) products = productRepository.findAll(pageable);
+        else products = productRepository.findByCategory(pageable, Category.valueOf(category));
+        for(Product product : products) product.setSavedUri();
+        return products;
     }
 
     private Pageable getPageable(Pageable pageable) {
         pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize()-1);
         return pageable;
     }
-
-//    static class CompareSizeAsc implements Comparator<OptionGroupSpecification> {
-//        @Override
-//        public int compare(OptionGroupSpecification o1, OptionGroupSpecification o2) {
-//            return o1.getSize().getSizeOrder() < o2.getSize().getSizeOrder() ? -1 : o1.getSize().getSizeOrder() > o2.getSize().getSizeOrder() ? 1:0;
-//        }
-//    }
 
 }

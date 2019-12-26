@@ -7,10 +7,10 @@ import * as constants from "constants/Constants";
 
 const cx = classNames.bind(styles);
 
-const OrderInfo = ({ zipcode, address, phoneFirstNumberTypes, onPostCode, onChangeInput}) => {
-    const phoneFirstNumberTypeList = phoneFirstNumberTypes.map(
-        (phoneFirstNumberType, index) => {
-            return (<option key={index} value={phoneFirstNumberType.get('code')}>{phoneFirstNumberType.get('code')}</option>)
+const OrderInfo = ({ zipcode, address, phoneFirstNumbers, onPostCode, onChangeInput}) => {
+    const phoneFirstNumberList = phoneFirstNumbers.map(
+        (phoneFirstNumber, index) => {
+            return (<option key={index} value={phoneFirstNumber.get('value')}>{phoneFirstNumber.get('value')}</option>)
         }
     );
     return (
@@ -35,7 +35,7 @@ const OrderInfo = ({ zipcode, address, phoneFirstNumberTypes, onPostCode, onChan
                 <div className={cx('order-info-list')}>
                     <div className={cx('term')}>휴대전화</div>
                     <select name="mobileNo1" className={cx('input')} onChange={onChangeInput}>
-                        {phoneFirstNumberTypeList}
+                        {phoneFirstNumberList}
                     </select>
                     <input type="text" name="mobileNo2" className={cx('input')} onChange={onChangeInput}/>
                     <input type="text" name="mobileNo3" className={cx('input')} onChange={onChangeInput}/>

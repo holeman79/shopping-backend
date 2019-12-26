@@ -58,3 +58,45 @@ CREATE TABLE USERS(
     CREATED_DATE    TIMESTAMP         NOT NULL       COMMENT '유저 등록일자',
     UPDATED_DATE    TIMESTAMP                COMMENT '유저 업데이트일자'
 );
+
+DROP TABLE IF EXISTS ORDERS;
+CREATE TABLE ORDERS(
+    ORDER_ID            INT PRIMARY KEY AUTO_INCREMENT,
+    ORDERER_NAME        VARCHAR(50)                      COMMENT '주문자 이름',
+    USER_ID             INT                              COMMENT '유저아이디',
+    ZIP_CODE            VARCHAR(50)                      COMMENT '우편번호',
+    ADDRESS             VARCHAR(100)                     COMMENT '주소',
+    DETAIL_ADDRESS      VARCHAR(100)                     COMMENT '주소상세',
+    MOBILE_NUMBER       VARCHAR(50)                      COMMENT '핸드폰번호',
+    PAYMENT_TYPE        VARCHAR(30)                      COMMENT '결제타입',
+    BANKBOOK            VARCHAR(30)       NOT NULL       COMMENT '무통장타입',
+    STATUS              VARCHAR(30)       NOT NULL       COMMENT '주문상태',
+    CREATED_DATE        TIMESTAMP         NOT NULL       COMMENT '등록일자'
+);
+
+DROP TABLE IF EXISTS ORDER_ITEMS;
+CREATE TABLE ORDER_ITEMS(
+    ORDER_ITEM_ID            INT PRIMARY KEY AUTO_INCREMENT,
+    PRODUCT_ID               INT                            COMMENT '상품ID',
+    PRODUCT_NAME             VARCHAR(100)                   COMMENT '상품이름',
+    COUNT                    INT                            COMMENT '주문수량',
+    PRODUCT_PRICE            INT                            COMMENT '상품가격',
+    ORDER_ID                 INT                            COMMENT '주문ID'
+);
+
+DROP TABLE IF EXISTS ORDER_OPTION_GROUPS;
+CREATE TABLE ORDER_OPTION_GROUPS(
+    ORDER_OPTION_GROUP_ID   INT PRIMARY KEY AUTO_INCREMENT,
+    ORDER_ITEM_ID           INT             NULL             COMMENT '주문상품ID',
+    NAME                    VARCHAR(100)    NOT NULL         COMMENT '이름'
+);
+
+
+DROP TABLE IF EXISTS ORDER_OPTIONS;
+CREATE TABLE ORDER_OPTIONS(
+    ORDER_OPTION_GROUP_ID   INT             NOT NULL        COMMENT '주문옵션그룹ID',
+    COLOR                   VARCHAR(50)     NOT NULL        COMMENT '색상',
+    SIZE                    VARCHAR(50)     NOT NULL        COMMENT '사이즈',
+    PRICE                   INT             NOT NULL        COMMENT '가격',
+    CONSTRAINT PK_ORDER_OPTIONS PRIMARY KEY (ORDER_OPTION_GROUP_ID, COLOR, SIZE, PRICE)
+);

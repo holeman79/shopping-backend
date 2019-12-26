@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ public class Order {
     public enum OrderStatus { ORDERED, PAYED, DELIVERING, DELIVERED }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ORDER_ID")
     private Long id;
 
@@ -43,11 +44,38 @@ public class Order {
     private PaymentType paymentType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "BANKBOOK_TYPE")
-    private BankBook selectedBankBook;
+    @Column(name = "BANKBOOK")
+    private BankBook bankBook;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS")
+    private OrderStatus orderStatus;
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name = "ORDER_ID")
     private List<OrderItem> orderItems;
 
+    @Column(name="CREATED_DATE")
+    private LocalDateTime createdDate;
+
+    @PrePersist
+    public void beforeCreate(){
+        createdDate = LocalDateTime.now();
+    }
+
+    public void ordered() {
+        this.orderStatus = OrderStatus.ORDERED;
+    }
+
+    public void payed() {
+        this.orderStatus = OrderStatus.PAYED;
+    }
+
+    public void delivering() {
+        this.orderStatus = OrderStatus.DELIVERING;
+    }
+
+    public void delivered() {
+        this.orderStatus = OrderStatus.DELIVERED;
+    }
 }

@@ -23,7 +23,9 @@ class ProductViewContainer extends Component {
     componentDidUpdate(prevProps, prevState){
         const { productOptionGroupSpecs, selectedColor, selectedSize } = this.props;
         if(prevProps.productOptionGroupSpecs !== this.props.productOptionGroupSpecs) {
-            let productOptionSpecs = productOptionGroupSpecs.get(0).get('optionSpecs');
+            let productOptionSpecs;
+            if(productOptionGroupSpecs.size > 0) productOptionSpecs = productOptionGroupSpecs.get(0).get('optionSpecs');
+            else return;
             let colorSizeList = fromJS([]);
             for(let i = 0; i < productOptionSpecs.size; i++){
                 let productOptionSpec = productOptionSpecs.get(i);
@@ -32,7 +34,6 @@ class ProductViewContainer extends Component {
                 for(let j = 0; j < colorSizeList.size; j++){
                     let item = colorSizeList.get(j);
                     if(productOptionSpec.get('color') === item.get('color').get('key')) {
-                        //colorSizeList = colorSizeList.update(j, item => item.set('size', item.get('size').push(option.get('size'))));
                         colorSizeList = colorSizeList.update(j, item => item.set('size',
                             item.get('size').push(
                                 Map({
@@ -68,7 +69,7 @@ class ProductViewContainer extends Component {
             });
         }
         // (prevProps.color !== this.props.color) || (prevProps.size !== this.props.size)
-        if( selectedColor.get('code') != "" && selectedSize.get('code') != "") {
+        if( selectedColor.get('key') != "" && selectedSize.get('key') != "") {
             this.handleAddOrderOption({selectedColor, selectedSize});
         }
     };
@@ -124,9 +125,29 @@ class ProductViewContainer extends Component {
     handlePurchase = () => {
         const { OrderActions, product, orderOptions, history } = this.props;
         let orderItems = fromJS([]);
+        const productImage = product.get('productImageGroups').get(0).get('productImages').get(0);
         for(let i = 0; i < orderOptions.size; i++){
-            orderItems = orderItems.push(Map({product: product, color: orderOptions.get(i).get('color'), size: orderOptions.get(i).get('size'), number: orderOptions.get(i).get('number')}));
+            const orderOptionsItem = fromJS([
+                Map({
+                    color: Map({ key: orderOptions.get(i).get('color').get('key'), value: orderOptions.get(i).get('color').get('value')}),
+                    size: Map({ key: orderOptions.get(i).get('size').get('key'), value: orderOptions.get(i).get('size').get('value')}),
+                    price: 0,
+                })
+            ]);
+
+            orderItems = orderItems.push(
+                Map(
+                    {productId: product.get('id'), name: product.get('name'), count: orderOptions.get(i).get('count'),
+                        price: product.get('price'), productImage: productImage,
+                        orderOptionGroups: fromJS([
+                            Map({
+                                name: "color&size",     // ㄴㅏ중엔 OptionGroup 명으로 변경필요.
+                                orderOptions: orderOptionsItem
+                            })])
+                    }
+                ));
         }
+
         OrderActions.initializeOrder(orderItems);
         history.push('/order');
     };

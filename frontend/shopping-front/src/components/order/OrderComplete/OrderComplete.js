@@ -7,10 +7,7 @@ import * as constants from "constants/Constants";
 
 const cx = classNames.bind(styles);
 
-const OrderComplete = ({ depositorName, selectedPayment, selectedBankBook, name }) => {
-    let accountInfo = "";
-    if(selectedBankBook !== "") accountInfo = selectedBankBook.get('bankName') + " " + selectedBankBook.get('bankAccount')
-
+const OrderComplete = ({ selectedPayment, selectedBankBook, name }) => {
     return (
         <div className={cx('order-complete-content')}>
             <div className={cx('info')}>
@@ -20,9 +17,8 @@ const OrderComplete = ({ depositorName, selectedPayment, selectedBankBook, name 
                     입금이 완료되면 배송이 진행됩니다.
                 </div>
                 <ul>
-                    <li>결제수단:{selectedPayment.get('name')}</li>
-                    <li>예금주:<strong>{selectedBankBook.get('accountHolder')}</strong></li>
-                    <li>입금계좌:{accountInfo}</li>
+                    <li>결제수단:{selectedPayment.get('value')}</li>
+                    <li>입금계좌:{selectedBankBook.get('value')}</li>
                 </ul>
             </div>
         </div>

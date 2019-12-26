@@ -12,7 +12,7 @@ class ListContainer extends Component {
             page,
             category
         });
-    }
+    };
 
     componentDidMount() {
         this.getProductList();

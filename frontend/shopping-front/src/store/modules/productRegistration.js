@@ -18,7 +18,7 @@ const ADD_PRODUCT = 'productRegistration/ADD_PRODUCT';
 
 // action creators
 export const initialize = createAction(INITIALIZE);
-export const getOptionList = createAction(GET_OPTION_LIST, api.getProductOptionList);
+export const getOptionList = createAction(GET_OPTION_LIST, api.getProductOptions);
 export const addOptionGroup = createAction(ADD_OPTION_GROUP);
 export const addOption = createAction(ADD_OPTION);
 export const deleteOption = createAction(DELETE_OPTION);

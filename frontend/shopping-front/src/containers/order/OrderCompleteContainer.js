@@ -22,11 +22,11 @@ class OrderCompleteContainer extends Component {
 
 
     render() {
-        const { depositorName, selectedPayment, selectedBankBook} = this.props;
+        const { selectedPayment, selectedBankBook} = this.props;
         const name = sessionStorage.getItem('name');
         return (
             <div>
-                <OrderComplete depositorName={depositorName} selectedPayment={selectedPayment} selectedBankBook={selectedBankBook} name={name}/>
+                <OrderComplete selectedPayment={selectedPayment} selectedBankBook={selectedBankBook} name={name}/>
             </div>
         );
     }
@@ -34,7 +34,6 @@ class OrderCompleteContainer extends Component {
 
 export default connect(
     (state) => ({
-        depositorName: state.order.get('depositorName'),
         selectedPayment: state.order.get('selectedPayment'),
         selectedBankBook: state.order.get('selectedBankBook'),
     }),

@@ -6,18 +6,18 @@ import * as constants from "constants/Constants";
 const cx = classNames.bind(styles);
 const numberFormat = new Intl.NumberFormat();
 
-const OrderItem = ({productFile = "", title, price, color, size, number}) => {
+const OrderItem = ({productImage = "", name, price, color, size, count}) => {
     let thumbnailUrl = "";
-    if(productFile != ""){
-        const { directory, thumbnailSavedFileName } = productFile;
-        thumbnailUrl = constants.IMAGE_GET_API + "?fileName=" + encodeURI(directory + thumbnailSavedFileName);
+    if(productImage != ""){
+        const savedUri = productImage.savedUri;
+        thumbnailUrl = constants.IMAGE_GET_API + "?fileName=" + encodeURI(savedUri );
     }
     return (
         <div className={cx('order-item')}>
             <img src={thumbnailUrl}/>
-            <div className={cx('order-content')}>{title}</div>
-            <div className={cx('order-option')}>{color.name} / {size.name}</div>
-            <div className={cx('order-amount')}>수량 {number}개</div>
+            <div className={cx('order-content')}>{name}</div>
+            <div className={cx('order-option')}>{color} / {size}</div>
+            <div className={cx('order-amount')}>수량 {count}개</div>
             <div className={cx('order-price')}>{numberFormat.format(price)}원</div>
         </div>
     )
@@ -27,18 +27,22 @@ const OrderList = ({orderItems}) => {
     let orderItemList = "";
     if(orderItems.size > 0){
         orderItemList = orderItems.map(
-            (order, index) => {
-                const { product, color, size, number } = order.toJS();
-                const { productFile, title, price } = product;
+            (orderItem, index) => {
+                const orderOption = orderItem.get('orderOptionGroups').get(0).get('orderOptions').get(0);
+                const { productImage, name, price, count } = orderItem.toJS();
+                const color = orderOption.get('color').get('value');
+                const size = orderOption.get('size').get('value');
+                // const { product, color, size, number } = order.toJS();
+                // const { productFile, title, price } = product;
                 return (
                     <OrderItem
                         key={index}
-                        productFile={productFile}
-                        title={title}
+                        productImage={productImage}
+                        name={name}
                         price={price}
                         color={color}
                         size={size}
-                        number={number}
+                        count={count}
                     />
                 )
             }

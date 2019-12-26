@@ -112,7 +112,7 @@ export default handleActions({
     },
     [ADD_ORDER_OPTION]: (state, action) => {
         const { selectedColor, selectedSize } = action.payload;
-        const option = Map({color: selectedColor, size: selectedSize, number: 1});
+        const option = Map({color: selectedColor, size: selectedSize, count: 1});
         return state.setIn(['order', 'options'], state.get('order').get('options').push(option))
             .set('selectedColor', Map({key: '', value: ''}))
             .set('selectedSize', Map({key: '', value: ''}))

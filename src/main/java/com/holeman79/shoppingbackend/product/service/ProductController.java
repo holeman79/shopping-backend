@@ -32,7 +32,7 @@ public class ProductController {
     }
 
     @GetMapping("/options")
-    public ResponseEntity<Map<String, List<EnumMapperValue>>> getCategoryColorSizeList(){
+    public ResponseEntity<Map<String, List<EnumMapperValue>>> getProductOptions(){
         Map<String, List<EnumMapperValue>> options = new LinkedHashMap();
         options.put("categories", enumMapper.get("categories"));
         options.put("colors", enumMapper.get("colors"));
@@ -54,8 +54,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Product>> getProductList(@PageableDefault Pageable pageable, @RequestParam(name="category", required=false) String categoryCode){
-        Page<Product> products = productService.getProductList(pageable, categoryCode);
+    public ResponseEntity<Page<Product>> getProducts(@PageableDefault Pageable pageable, @RequestParam(name="category", required=false) String category){
+        Page<Product> products = productService.getProductList(pageable, category);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 }

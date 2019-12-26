@@ -9,6 +9,7 @@ import OrderList from "components/order/OrderList";
 import OrderInfo from "components/order/OrderInfo";
 import PostCodeModal from "components/modal/PostCodeModal";
 import PaymentInfo from "components/order/PaymentInfo";
+import {Map} from "immutable";
 
 const toastColor = {
     background: '#505050',
@@ -41,9 +42,9 @@ class OrderContainer extends Component {
         const { OrderActions, orderItems } = this.props;
         let totalPrice = 0;
         for(let i = 0; i < orderItems.size; i++){
-            let price = orderItems.get(i).get('product').get('price');
-            let number = orderItems.get(i).get('number');
-            totalPrice += (price * number);
+            let price = orderItems.get(i).get('price');
+            let count = orderItems.get(i).get('count');
+            totalPrice += (price * count);
         }
         OrderActions.changeInput({name: 'totalPrice', value: totalPrice});
     };
@@ -116,18 +117,39 @@ class OrderContainer extends Component {
     };
 
     handlePayment = async() => {
-        const { orderItems, ordererName, zipcode, address, detailAddress, mobileNo1, mobileNo2, mobileNo3, selectedPayment, totalPrice, OrderActions, history  } = this.props;
+        let { orderItems, ordererName, zipcode, address, detailAddress, mobileNo1, mobileNo2, mobileNo3, selectedPayment, OrderActions, history  } = this.props;
         if(ordererName === '' || zipcode === '' || address === '' || detailAddress === '' || mobileNo2 === '' || mobileNo3 === ''){
             this.toast(constants.WARNING_ADD_ORDER_ORDERER_INFO, 'custom', 2000, toastColor);
             return;
         }
-        if(selectedPayment.get('code') !== 'no_bankbook') return this.toast(constants.WARNING_ADD_ORDER_PAYMENT_WAY, 'custom', 2000, toastColor);
+        if(selectedPayment.get('key') !== 'REMITTANCE') return this.toast(constants.WARNING_ADD_ORDER_PAYMENT_WAY, 'custom', 2000, toastColor);
         else{
             const { depositorName, selectedBankBook } = this.props;
             if(depositorName === '') return this.toast(constants.WARNING_ADD_ORDER_PAYMENT_DEPOSITORNAME, 'custom', 2000, toastColor);
             const userId = sessionStorage.getItem('id');
-            let order = { ordererName, zipcode, address, detailAddress, mobileNo1, mobileNo2, mobileNo3,
-                            selectedPayment, depositorName, selectedBankBook, totalPrice, userId, orderItems };
+
+            for(let i = 0; i < orderItems.size; i++){
+                orderItems = orderItems.update(i, orderItem =>
+                    {
+                        let orderOptionGroups = orderItem.get('orderOptionGroups');
+                        for(let j = 0; j < orderOptionGroups.size; j++){
+                            orderOptionGroups = orderOptionGroups.update(j, orderOptionGroup => {
+                                let orderOptions = orderOptionGroup.get('orderOptions');
+                                for(let k = 0; k < orderOptions.size; k++){
+                                    orderOptions = orderOptions.update(k, orderOption => orderOption.set('color', orderOption.get('color').get('key'))
+                                                                                                    .set('size', orderOption.get('size').get('key')));
+                                }
+                                orderOptionGroup = orderOptionGroup.set('orderOptions', orderOptions);
+                                return orderOptionGroup;
+                            });
+                        }
+                        return orderItem.set('orderOptionGroups', orderOptionGroups);
+                    }
+                );
+            }
+
+            let order = { ordererName, userId, zipcode, address, detailAddress, mobileNumber: mobileNo1 + mobileNo2 + mobileNo3,
+                paymentType: selectedPayment.get('key'), bankBook: selectedBankBook.get('key'), depositorName, orderItems };
             try{
                 await OrderActions.addOrder(order);
                 history.push('/order/complete');
@@ -139,14 +161,14 @@ class OrderContainer extends Component {
 
     render() {
         const { handleAddress, handleChangeInput, handlePostCode, handleCancel, handleChangeObject, handlePayment } = this;
-        const { orderItems, visible, zipcode, address, selectedPayment, depositorName, selectedBankBook, totalPrice, paymentWays, bankBooks, phoneFirstNumberTypes } = this.props;
+        const { orderItems, visible, zipcode, address, selectedPayment, depositorName, selectedBankBook, totalPrice, paymentTypes, bankBooks, phoneFirstNumbers } = this.props;
         return (
             <div>
                 <Notifications />
                 <OrderList orderItems={orderItems}/>
-                <OrderInfo zipcode={zipcode} address={address} phoneFirstNumberTypes={phoneFirstNumberTypes}
+                <OrderInfo zipcode={zipcode} address={address} phoneFirstNumbers={phoneFirstNumbers}
                            onPostCode={ handlePostCode } onChangeInput={handleChangeInput} />
-                <PaymentInfo paymentWays={paymentWays} bankBooks={bankBooks}  selectedPayment={selectedPayment} depositorName={depositorName} selectedBankBook={selectedBankBook} totalPrice={totalPrice}
+                <PaymentInfo paymentTypes={paymentTypes} bankBooks={bankBooks}  selectedPayment={selectedPayment} depositorName={depositorName} selectedBankBook={selectedBankBook} totalPrice={totalPrice}
                              onChangeObject={handleChangeObject} onChangeInput={handleChangeInput} onPayment={handlePayment}/>
                 <PostCodeModal visible={ visible } onCancel={ handleCancel } onAddress={ handleAddress }/>
             </div>
@@ -168,13 +190,13 @@ export default connect(
 
         selectedPayment: state.order.get('selectedPayment'),
         depositorName: state.order.get('depositorName'),
-        selectedBankBook: state.order.get('bankBook'),
+        selectedBankBook: state.order.get('selectedBankBook'),
 
         totalPrice: state.order.get('totalPrice'),
 
-        paymentWays: state.order.get('paymentWays'),
+        paymentTypes: state.order.get('paymentTypes'),
         bankBooks: state.order.get('bankBooks'),
-        phoneFirstNumberTypes: state.order.get('phoneFirstNumberTypes'),
+        phoneFirstNumbers: state.order.get('phoneFirstNumbers'),
         error: state.order.get('error'),
     }),
     (dispatch) => ({

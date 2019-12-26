@@ -2,24 +2,20 @@ package com.holeman79.shoppingbackend.order.service;
 
 import com.holeman79.shoppingbackend.order.domain.Order;
 import com.holeman79.shoppingbackend.order.domain.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
-public class OrderService {
-    @Autowired
-    OrderRepository orderRepository;
+import javax.transaction.Transactional;
 
+@Service
+@RequiredArgsConstructor
+public class OrderService {
+    private final OrderRepository orderRepository;
+
+    @Transactional
     public Order addOrder(Order order){
-//        Long orderNo = OrderNoGenerator.nextOrderNo();
-//        order.setOrderNo(orderNo);
-//        for(OrderItem orderItem : order.getOrderItems()){
-//            orderItem.setOrder(order);
-//            orderItem.setOrderStatusType(OrderStatusType.PREPARING_PRODUCT);
-//        }
-//
-//        Order savedOrder = orderRepository.save(order);
-//        return savedOrder;
-        return null;
+        order.ordered();
+        Order savedOrder = orderRepository.save(order);
+        return savedOrder;
     }
 }
